@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
           child: Scaffold(
             backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: Colors.green[900],
+          backgroundColor: Color.fromARGB(255,77, 145, 90),
           elevation: 0,
           actions: [
             IconButton(onPressed: () {}, icon: Icon(Icons.notifications))
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
   Widget navItem(IconData icon, bool selected, {Function()? onTap}) {
     return Expanded(
         child: Container(
-      color: selected ? Colors.black : Colors.white,
+      color: selected ? Color.fromARGB(255,77, 145, 90) : Colors.white,
       child: InkWell(
         child: Icon(
           icon,

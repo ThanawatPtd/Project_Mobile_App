@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_mobile_app/services/flutterfire.dart';
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -10,6 +12,12 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
+  final _formkey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,6 +31,8 @@ class _SignupState extends State<Signup> {
                 elevation: 0,
               ),
               body: SingleChildScrollView(
+                  child: Form(
+                key: _formkey,
                 child: Center(
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,32 +51,43 @@ class _SignupState extends State<Signup> {
                           ),
                         ),
                         buildTextField("name",
-                            const FaIcon(FontAwesomeIcons.solidUser), "Email"),
+                            const FaIcon(FontAwesomeIcons.solidUser), "Email", emailController),
                         const SizedBox(
                           height: 20,
                         ),
                         buildTextField("username",
-                            const FaIcon(FontAwesomeIcons.circleUser), "Email"),
+                            const FaIcon(FontAwesomeIcons.circleUser), "Email", usernameController),
                         SizedBox(
                           height: 20.h,
                         ),
                         buildTextField("password",
-                            const FaIcon(FontAwesomeIcons.key), "Password"),
+                            const FaIcon(FontAwesomeIcons.key), "Password", passwordController),
                         SizedBox(
                           height: 20.h,
                         ),
                         buildTextField("confirm password",
-                            const FaIcon(FontAwesomeIcons.key), "Password"),
+                            const FaIcon(FontAwesomeIcons.key), "Password", confirmPasswordController),
                         SizedBox(
                           height: 30.h,
                         ),
                         GestureDetector(
-                          onTap: () => Navigator.pop(context),
+                          onTap: () async{
+                            print("Press SingUp");
+                            print("${emailController.text}\n${passwordController.text}");
+                            if(_formkey.currentState!.validate()){
+                              bool registerPass = await register(emailController.text, passwordController.text);
+                              print(registerPass);
+                              if(registerPass){
+                                print("Register Success!");
+                                Navigator.pushNamed(context, 'login');
+                              }
+                            }                
+                          },
                           child: button("Sign up", Colors.green[300]!),
                         ),
                       ]),
                 ),
-              )),
+              ))),
         ));
   }
 
@@ -86,7 +107,7 @@ class _SignupState extends State<Signup> {
     );
   }
 
-  Widget buildTextField(String text, FaIcon icon, String type) {
+  Widget buildTextField(String text, FaIcon icon, String type, TextEditingController controller) {
     return Container(
         width: 325.w,
         height: 50.h,
@@ -107,7 +128,8 @@ class _SignupState extends State<Signup> {
             SizedBox(
               width: 270.w,
               height: 50.h,
-              child: TextField(
+              child: TextFormField(
+                controller: controller,
                 keyboardType: TextInputType.emailAddress,
                 obscureText: type == "Email" ? false : true,
                 decoration: InputDecoration(
@@ -128,6 +150,12 @@ class _SignupState extends State<Signup> {
                     borderSide: BorderSide(color: Colors.transparent),
                   ),
                 ),
+                validator: (value) {
+                  if(value == null || value.isEmpty){
+                    return "${text} Should not be empty";
+                  }
+                  return null;
+                },
               ),
             )
           ],

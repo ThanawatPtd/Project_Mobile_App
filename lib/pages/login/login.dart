@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_mobile_app/services/flutterfire.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -80,7 +81,7 @@ class _LoginState extends State<Login> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               reuseableText("Don't have account? "),
-                              signUp(),
+                              signUpButton(),
                             ],
                           ),
                         ),
@@ -156,7 +157,7 @@ class _LoginState extends State<Login> {
         ));
   }
 
-  Widget signUp() {
+  Widget signUpButton() {
     return GestureDetector(
         onTap: () => Navigator.pushNamed(context, 'signup'),
         child: Container(
@@ -177,7 +178,12 @@ class _LoginState extends State<Login> {
 
   Widget button(String text, Color color) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'home'),
+      onTap: () async{
+        bool signInPass = await signIn("Thanawatptd@hotmail.com", "123456");
+        if(signInPass){
+         Navigator.pushNamed(context, 'home'); 
+        }
+      },
       child: Container(
         margin: EdgeInsets.only(top: 20.h),
         width: 325.w,
