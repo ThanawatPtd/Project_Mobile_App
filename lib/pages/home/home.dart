@@ -10,6 +10,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  List WidgetOption = [Text("home"),Text("list"),Text("summary"),Text("setting")];
   int pageIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -68,10 +69,11 @@ class _HomeState extends State<Home> {
                   ],
                 ),
               ),
-
           ),
         ),
-        body: SingleChildScrollView(),
+        body: Center(
+          child: WidgetOption[pageIndex],
+        ),
       )),
     );
   }
