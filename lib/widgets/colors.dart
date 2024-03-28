@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-class CustomColor{
+class CustomColor {
   static Color primaryColor = Color.fromARGB(255, 77, 145, 90);
-  // static Color secondaryColor = Color 
+  // static Color secondaryColor = Color
 }

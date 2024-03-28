@@ -11,32 +11,53 @@ class Setting extends StatefulWidget {
 }
 
 class _SettingState extends State<Setting> {
+  final uid = FirebaseAuth.instance.currentUser!.uid;
+  final docRef = FirebaseFirestore.instance.collection('your_collection').doc('document_id');
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: SafeArea(
         child: Scaffold(
           appBar: CustomAppBar(),
           body: Container(
-            child: StreamBuilder(
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if(!snapshot.hasData){
-                      return Center(child: CircularProgressIndicator(),);
-                    }
-                    else{
-                      return Text(snapshot.data.docs.);
-                    }
-                  },
-              stream: FirebaseFirestore.instance
-                  .collection("Users")
-                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                  .collection("Records")
-                  .snapshots(),
-            ),
-          ),
+              child: Center(
+            child: FutureBuilder(builder: (context, snapshot) {
+              if(snapshot.hasData){
+                return Text(snapshot.data!);
+              }
+              else{
+                return CircularProgressIndicator();
+              }
+            }, future: getUsername(),),
+          )),
         ),
       ),
     );
+  }
+
+  Future<String> getUsername()async{
+    // Reference to the document you want to retrieve
+final docRef = FirebaseFirestore.instance.collection('Users').doc(uid);
+
+// Get the document data
+DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await docRef.get();
+
+// Check if the document exists
+if (documentSnapshot.exists) {
+  // Get the data as a Map
+  Map<String, dynamic> data = documentSnapshot.data() as Map<String, dynamic>;
+  
+  // Access specific fields
+  String name = data['Username'];
+  String email = data['Email'];
+  return '$name\n$email';
+  // Use the data for your UI or logic
+} else {
+  // The document does not exist
+  return 'Document does not exist';
+}
+
   }
 }
