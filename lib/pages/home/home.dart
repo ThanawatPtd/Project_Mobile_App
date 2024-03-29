@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_mobile_app/pages/home/home_page.dart';
+import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/pages/summary/summary.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 
@@ -13,7 +14,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List WidgetOption = [HomePage(), Text("list"), Summary(), Text("setting")];
+  List WidgetOption = [HomePage(), Text("list"), Summary(), Setting()];
 
   List namePage = ["Home", "list", "Summary", "Setting"];
   int pageIndex = 0;

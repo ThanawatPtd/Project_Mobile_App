@@ -7,9 +7,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color.fromARGB(255, 243, 243, 243),
-      body: ListView(children: [Container(
+    return ListView(children: [Container(
         child: Column(
           children: <Widget> [
             SizedBox(height: 20.h,),
@@ -23,7 +21,6 @@ class HomePage extends StatelessWidget {
             Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: 100,expense: 200,),),
           ],
         ),
-      ),],)
-    );
+      ),],);
   }
 }
