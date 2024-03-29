@@ -18,10 +18,6 @@ class _SettingState extends State<Setting> {
   Widget build(BuildContext context) {
 
     return Container(
-      child: SafeArea(
-        child: Scaffold(
-          appBar: CustomAppBar(),
-          body: Container(
               child: Center(
             child: FutureBuilder(builder: (context, snapshot) {
               if(snapshot.hasData){
@@ -31,9 +27,7 @@ class _SettingState extends State<Setting> {
                 return CircularProgressIndicator();
               }
             }, future: getUsername(),),
-          )),
-        ),
-      ),
+              )
     );
   }
 

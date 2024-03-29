@@ -14,7 +14,6 @@ class _SummaryState extends State<Summary> {
     return Container(
       child: SafeArea(
         child: Scaffold(
-          appBar: CustomAppBar(),
         ),
       ),
     );
