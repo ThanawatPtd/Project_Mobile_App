@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:project_mobile_app/pages/create_record/create_record.dart';
 import 'package:project_mobile_app/pages/home/home.dart';
 import 'package:project_mobile_app/pages/login/login.dart';
 import 'package:project_mobile_app/pages/setting/setting.dart';
@@ -38,13 +39,14 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
           builder: (context, child) => MaterialApp(
                 debugShowCheckedModeBanner: false,
-                home: Login(),
+                home: CreateRecord(),
                 routes: {
                   'login': (context) =>  const Login(),
                   'signup': (context) => const Signup(),
                   'home':(context) => const Home(),
                   'summary':(context) => const Summary(),
                   'setting':(context) => const Setting(),
+                  'create_record':(context) => const CreateRecord(),
                 },
               )),
     );
