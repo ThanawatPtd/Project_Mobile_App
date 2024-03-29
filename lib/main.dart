@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
           builder: (context, child) => MaterialApp(
                 debugShowCheckedModeBanner: false,
-                home: CreateRecord(),
+                home: Login(),
                 routes: {
                   'login': (context) =>  const Login(),
                   'signup': (context) => const Signup(),
