@@ -7,7 +7,7 @@ class Setting extends StatefulWidget {
   const Setting({super.key});
 
   @override
-  State<Setting> createState() => _SettingState();
+  State<Setting> createState() => _SettingState();  
 }
 
 class _SettingState extends State<Setting> {

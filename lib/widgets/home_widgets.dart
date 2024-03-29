@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:project_mobile_app/widgets/colors.dart';
 
 class WalletCard extends StatelessWidget {
   WalletCard({super.key, required this.money});
@@ -12,7 +13,7 @@ class WalletCard extends StatelessWidget {
     return Container(
       height: 185.h,
       width: 300.h,
-      decoration: BoxDecoration(color: Color.fromARGB(255, 77, 145, 90),borderRadius: BorderRadius.circular(15), boxShadow: [
+      decoration: BoxDecoration(color: CustomColor.primaryColor,borderRadius: BorderRadius.circular(15), boxShadow: [
         BoxShadow(color: Colors.grey.withOpacity(0.5),
           spreadRadius: 5,
           blurRadius: 7,
@@ -25,7 +26,7 @@ class WalletCard extends StatelessWidget {
           Padding(padding: EdgeInsets.only(top: 40.h),child: Row(mainAxisAlignment: MainAxisAlignment.center,children: [Container(
             height: 130.h,
             width: 130.w,
-            decoration: BoxDecoration(color: Color.fromARGB(255, 45, 79, 52),shape: BoxShape.circle,border: Border.all(color: Colors.white,width: 2.h)),
+            decoration: BoxDecoration(color: CustomColor.primaryColor,shape: BoxShape.circle,border: Border.all(color: Colors.white,width: 2.h)),
             child: Stack(children: [Padding(padding: EdgeInsets.only(left: 40.h, top: 30.h),child: Text("Money",style: TextStyle(color: Colors.grey[300]),),),
             Align(alignment: Alignment.center, child: Text("${money.toStringAsFixed(2)}", style: TextStyle(color: Colors.white,fontSize: 15.h,fontWeight: FontWeight.bold),),)],),),],),)
         ],

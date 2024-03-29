@@ -12,8 +12,6 @@ import 'package:project_mobile_app/pages/welcome/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-
-
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   initializeFirebase();
@@ -23,7 +21,7 @@ void main() {
 Future<void> initializeFirebase() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
-);
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -37,14 +35,18 @@ class MyApp extends StatelessWidget {
       ],
       child: ScreenUtilInit(
           builder: (context, child) => MaterialApp(
+                theme: ThemeData(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                ),
                 debugShowCheckedModeBanner: false,
                 home: Login(),
                 routes: {
-                  'login': (context) =>  const Login(),
+                  'login': (context) => const Login(),
                   'signup': (context) => const Signup(),
-                  'home':(context) => const Home(),
-                  'summary':(context) => const Summary(),
-                  'setting':(context) => const Setting(),
+                  'home': (context) => const Home(),
+                  'summary': (context) => const Summary(),
+                  'setting': (context) => const Setting(),
                 },
               )),
     );
