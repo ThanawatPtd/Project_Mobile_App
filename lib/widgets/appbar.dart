@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project_mobile_app/widgets/colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSize {
   const CustomAppBar({super.key});
@@ -7,7 +8,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
   Widget build(BuildContext context) {
     return AppBar(
       actions: [Icon(Icons.notifications)],
-      backgroundColor: Color.fromARGB(255, 77, 145, 90),
+      backgroundColor: CustomColor.primaryColor,
       foregroundColor: Colors.white,
       title: Text("Summary"),
     );
