@@ -62,3 +62,19 @@ class ListCategory extends StatelessWidget {
     );
   }
 }
+
+class CustomContainer extends StatelessWidget {
+  CustomContainer({super.key, required this.child, this.margin});
+
+  Widget child;
+  EdgeInsetsGeometry? margin;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white),
+      child: child,
+      margin: margin,
+    );
+  }
+}
