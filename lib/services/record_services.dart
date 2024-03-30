@@ -7,13 +7,16 @@ class RecordService {
   late final CollectionReference record;
 
   Stream<QuerySnapshot> getRecordStream() {
-    record = FirebaseFirestore.instance
-        .collection('Users')
-        .doc(userId)
-        .collection('Record');
     final recordStream = record.snapshots();
 
     return recordStream;
+  }
+  void setRecord()async{
+    record = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Record');
+    print("record Innitialize");
   }
 
   List checkTime(List recordList, String type) {
@@ -37,6 +40,20 @@ class RecordService {
     }
     return newRecordList;
   }
+  num sumAmount(List recordList,String type){
+    num total = 0.00;
+    for(var record in recordList){
+      DocumentSnapshot doucument = record;
+      Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
+      num amount = data['Amount'];
+      String recordType = data['Type'];
+      if(recordType == type){
+        total += amount;
+      }
+    }
+    return total;
+  }
+
 
   Future<void> addRecord(String category, num amount, String datetime, String description,String type){
     return record.add({'Category' : category, 'Amount': amount, 'Date': datetime, 'Description': description, 'Type': type} );

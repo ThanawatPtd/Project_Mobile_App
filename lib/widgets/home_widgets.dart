@@ -7,7 +7,7 @@ import 'package:project_mobile_app/widgets/colors.dart';
 class WalletCard extends StatelessWidget {
   WalletCard({super.key, required this.money});
 
-  double money = 0.00;
+  num money = 0.00;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -38,8 +38,8 @@ class WalletCard extends StatelessWidget {
 class ListCategory extends StatelessWidget {
   ListCategory({super.key, required this.income, required this.expense});
 
-  double income = 0.00;
-  double expense = 0.00;
+  num income = 0.00;
+  num expense = 0.00;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -53,11 +53,13 @@ class ListCategory extends StatelessWidget {
       child: Padding(padding: EdgeInsets.all(30), child: Container(child: Column(children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Icon(Icons.monetization_on_rounded,color: Color.fromARGB(255, 77, 145, 90),), Text("Income"),Row(children: [Text("THB ${income}",style: TextStyle(color: Color.fromARGB(255, 77, 145, 90)),),Icon(Icons.chevron_right,color: Color.fromARGB(255, 77, 145, 90),)],)],),
+          children: [Row(
+            children: [Icon(Icons.monetization_on_rounded,color: CustomColor.primaryColor,),SizedBox(width: 50.w,), Text("income")],),Row(children: [Text("THB ${income}",style: TextStyle(color: CustomColor.primaryColor),),Icon(Icons.chevron_right,color: CustomColor.primaryColor)],)],),
         SizedBox(height: 40.h, child: Divider(height: 1.h,),),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Icon(Icons.monetization_on_rounded,color: Color.fromARGB(255, 255, 25, 25),), Text("Expense"),Row(children: [Text("THB ${expense}",style: TextStyle(color: Color.fromARGB(255, 255, 25 ,25)),),Icon(Icons.chevron_right,color: Color.fromARGB(255, 255, 25, 25),)],)],),
+          children: [Row(
+            children: [Icon(Icons.monetization_on_rounded,color:Color.fromARGB(255, 255, 25 ,25),),SizedBox(width: 50.w,), Text("Expense")],),Row(children: [Text("THB ${expense}",style: TextStyle(color: Color.fromARGB(255, 255, 25 ,25)),),Icon(Icons.chevron_right,color: Color.fromARGB(255, 255, 25, 25),)],)],),
       ],),),)
     );
   }

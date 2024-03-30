@@ -5,6 +5,7 @@ import 'package:project_mobile_app/pages/home/home_page.dart';
 import 'package:project_mobile_app/pages/list/list.dart';
 import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/pages/summary/summary.dart';
+import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
@@ -19,6 +20,8 @@ class _HomeState extends State<Home> {
   List WidgetOption = [HomePage(), ListPage(), Summary(), Setting()];
   List namePage = ["Home", "list", "Summary", "Setting"];
   int pageIndex = 0;
+  
+  RecordService recordService = RecordService();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
