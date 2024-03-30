@@ -4,16 +4,19 @@ import 'package:intl/intl.dart';
 
 class RecordService {
   late String userId = FirebaseAuth.instance.currentUser!.uid;
-  late final CollectionReference record;
+  late CollectionReference record;
 
   Stream<QuerySnapshot> getRecordStream() {
+    final recordStream = record.snapshots();
+
+    return recordStream;
+  }
+
+  void setRecord(){
     record = FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)
         .collection('Record');
-    final recordStream = record.snapshots();
-
-    return recordStream;
   }
 
   List checkTime(List recordList, String type) {
@@ -38,7 +41,12 @@ class RecordService {
     return newRecordList;
   }
 
+  Future<void> addRecord1(String category, String datetime, String description,String type){
+    return record.add({'Category' : category, 'Date': datetime, 'Description': description, 'Type': type});
+  }
+
   Future<void> addRecord(String category, num amount, String datetime, String description,String type){
     return record.add({'Category' : category, 'Amount': amount, 'Date': datetime, 'Description': description, 'Type': type} );
   }
+  
 }

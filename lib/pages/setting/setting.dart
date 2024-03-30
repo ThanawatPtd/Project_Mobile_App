@@ -32,7 +32,11 @@ class _SettingState extends State<Setting> {
                 settingButton("Category", Icon(Icons.arrow_right)),
                 settingButton("App information", Icon(Icons.arrow_right)),
                 SizedBox(height: 380,),
-                logoutButton("Logout", CustomColor.primaryColor),
+                GestureDetector(child: logoutButton("Logout", CustomColor.primaryColor), onTap: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pop(context);
+                },),
+                
               ],
             );
           } else {

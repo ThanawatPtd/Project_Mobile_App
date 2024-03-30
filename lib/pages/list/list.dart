@@ -17,6 +17,12 @@ class ListPageState extends State<ListPage> {
   final RecordService recordService = RecordService();
 
   @override
+  initState(){
+    super.initState();
+    recordService.setRecord();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,

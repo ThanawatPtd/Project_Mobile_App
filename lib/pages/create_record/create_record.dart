@@ -1,8 +1,8 @@
 import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
@@ -19,6 +19,7 @@ class CreateRecord extends StatefulWidget {
 class _CreateRecordState extends State<CreateRecord> {
   TextEditingController moneyController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController relatedController = TextEditingController();
   String? timeText;
   DateTime? date;
   var format = DateFormat("yyyy-MM-dd");
@@ -29,6 +30,7 @@ class _CreateRecordState extends State<CreateRecord> {
   @override
   initState() {
     timeText = format.format(DateTime.now());
+    recordService.setRecord();
     super.initState();
   }
 
@@ -46,6 +48,7 @@ class _CreateRecordState extends State<CreateRecord> {
             Align(
               alignment: Alignment.topRight,
               child: DropdownButton<String>(
+                // dropdown income expense
                 underline: Container(
                   height: 0,
                 ),
@@ -62,6 +65,78 @@ class _CreateRecordState extends State<CreateRecord> {
               ),
             ),
             Padding(
+              //Category
+              padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+              child: CustomContainer(
+                  child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Category",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.white),
+                            foregroundColor:
+                                const MaterialStatePropertyAll(Colors.grey)),
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Dialog(
+                                child: Container(
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          FaIcon(FontAwesomeIcons.boxesPacking),
+                                          SizedBox(
+                                            width: 10.w,
+                                          ),
+                                          Text("Category"),
+                                          SizedBox(width: 155.w,),
+                                          IconButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              icon: FaIcon(
+                                                  FontAwesomeIcons.close))
+                                        ],
+                                      ),
+                                      // GridView.count(crossAxisCount: crossAxisCount)
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Category"),
+                            const Icon(Icons.arrow_downward)
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              )),
+            ),
+            Padding(
+              // money textField
               padding: const EdgeInsets.all(8.0),
               child: CustomContainer(
                   child: Padding(
@@ -86,6 +161,7 @@ class _CreateRecordState extends State<CreateRecord> {
               )),
             ),
             Padding(
+              //date picker
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               child: CustomContainer(
                   child: Padding(
@@ -114,12 +190,12 @@ class _CreateRecordState extends State<CreateRecord> {
                                 return Theme(
                                   data: Theme.of(context).copyWith(
                                     colorScheme: const ColorScheme.light(
-                                      primary: Color.fromARGB(255, 77, 145, 90), // header background color
+                                      primary: Color.fromARGB(255, 77, 145,
+                                          90), // header background color
                                       onPrimary:
                                           Colors.white, // header text color
-                                      onSurface:
-                                          Colors.black,
-                                       // body text color
+                                      onSurface: Colors.black,
+                                      // body text color
                                     ),
                                     textButtonTheme: TextButtonThemeData(
                                       style: TextButton.styleFrom(
@@ -152,6 +228,7 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
+              //description
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomContainer(
@@ -169,14 +246,15 @@ class _CreateRecordState extends State<CreateRecord> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
-                      child: customTextField(
-                          descriptionController, "", TextInputType.multiline, 70),
+                      child: customTextField(descriptionController, "",
+                          TextInputType.multiline, 70),
                     ),
                   ],
                 ),
               )),
             ),
             Padding(
+              // Related TextField
               padding: const EdgeInsets.all(8.0),
               child: CustomContainer(
                   child: Padding(
@@ -194,21 +272,28 @@ class _CreateRecordState extends State<CreateRecord> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
                       child: customTextField(
-                          moneyController, "", TextInputType.multiline, 70),
+                          relatedController, "", TextInputType.multiline, 70),
                     ),
                   ],
                 ),
               )),
             ),
-            ElevatedButton(onPressed: () {
-              // recordService.addRecord("Food",double.parse(moneyController.text),timeText!, descriptionController.text, dropDownValue);
+            ElevatedButton(
+                onPressed: () {
+                  //Enter
+                  recordService.addRecord(
+                      "Food",
+                      int.parse(moneyController.text),
+                      timeText!,
+                      descriptionController.text,
+                      dropDownValue);
 
-              moneyController.clear();
-              descriptionController.clear();
+                  moneyController.clear();
+                  descriptionController.clear();
 
-              Navigator.pop(context);
-
-            }, child: Text("Comfirm")),
+                  Navigator.pop(context);
+                },
+                child: Text("Comfirm")),
           ],
         )));
   }
@@ -223,6 +308,7 @@ Widget customTextField(TextEditingController controller, String text,
     width: 325.w,
     height: height.h,
     child: TextField(
+      controller: controller,
       maxLines: 2,
       keyboardType: inputType,
       decoration: InputDecoration(
