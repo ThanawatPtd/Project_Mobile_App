@@ -12,7 +12,7 @@ class RecordService {
     return recordStream;
   }
 
-  void setRecord(){
+  void setRecord() {
     record = FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)
@@ -28,25 +28,56 @@ class RecordService {
 
       DateTime recordTime = dateFormat.parse(data['Date']);
 
-      if(recordTime.day == DateTime.now().day && recordTime.month == DateTime.now().month &&  recordTime.year == DateTime.now().year && type == "today"){
+      if (recordTime.day == DateTime.now().day &&
+          recordTime.month == DateTime.now().month &&
+          recordTime.year == DateTime.now().year &&
+          type == "today") {
         newRecordList.add(record);
       }
-      if(recordTime.month == DateTime.now().month && recordTime.year == DateTime.now().year && type == "this_month"){
+      if (recordTime.month == DateTime.now().month &&
+          recordTime.year == DateTime.now().year &&
+          type == "this_month") {
         newRecordList.add(record);
       }
-      if(recordTime.year == DateTime.now().year && type == "this_year"){
+      if (recordTime.year == DateTime.now().year && type == "this_year") {
         newRecordList.add(record);
       }
     }
     return newRecordList;
   }
 
-  Future<void> addRecord1(String category, String datetime, String description,String type){
-    return record.add({'Category' : category, 'Date': datetime, 'Description': description, 'Type': type});
+  num sumAmount(List recordList, String type) {
+    num total = 0.00;
+    for (var record in recordList) {
+      DocumentSnapshot doucument = record;
+      Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
+      num amount = data['Amount'];
+      String recordType = data['Type'];
+      if (recordType == type) {
+        total += amount;
+      }
+    }
+    return total;
   }
 
-  Future<void> addRecord(String category, num amount, String datetime, String description,String type){
-    return record.add({'Category' : category, 'Amount': amount, 'Date': datetime, 'Description': description, 'Type': type} );
+  Future<void> addRecord1(
+      String category, String datetime, String description, String type) {
+    return record.add({
+      'Category': category,
+      'Date': datetime,
+      'Description': description,
+      'Type': type
+    });
   }
-  
+
+  Future<void> addRecord(String category, num amount, String datetime,
+      String description, String type) {
+    return record.add({
+      'Category': category,
+      'Amount': amount,
+      'Date': datetime,
+      'Description': description,
+      'Type': type
+    });
+  }
 }

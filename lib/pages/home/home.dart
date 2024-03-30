@@ -20,13 +20,8 @@ class _HomeState extends State<Home> {
   List WidgetOption = [HomePage(), ListPage(), Summary(), Setting()];
   List namePage = ["Home", "list", "Summary", "Setting"];
   int pageIndex = 0;
- 
+  
   RecordService recordService = RecordService();
-
-  initState(){
-    recordService.setRecord();
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(

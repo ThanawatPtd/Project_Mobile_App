@@ -23,7 +23,7 @@ Future<bool> register(String username, String email, String password) async {
     FirebaseFirestore.instance
         .collection("Users")
         .doc(userId)
-        .set({"Email": email, "Username": username, "Money": 0});
+        .set({"Email": email, "Username": username, "Amount": 0});
     FirebaseAuth.instance.signOut();
     return true;
   } on FirebaseAuthException catch (e) {

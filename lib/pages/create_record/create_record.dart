@@ -278,16 +278,8 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  //Enter
-                  recordService.addRecord(
-                      "Food",
-                      int.parse(moneyController.text),
-                      timeText!,
-                      descriptionController.text,
-                      dropDownValue);
-
+            ElevatedButton(onPressed: () {
+              recordService.addRecord("Food",double.parse(moneyController.text),timeText!, descriptionController.text, dropDownValue);
                   moneyController.clear();
                   descriptionController.clear();
 
