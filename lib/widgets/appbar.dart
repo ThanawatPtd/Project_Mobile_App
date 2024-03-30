@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSize {
-  CustomAppBar({super.key, required this.title});
-
+  CustomAppBar({super.key, required this.title, required this.checkPop});
+  bool checkPop;
   String title;
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
         AppBar(
           backgroundColor: Color.fromARGB(255, 77, 145, 90),
           foregroundColor: Colors.white,
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: checkPop,
           centerTitle: true,
           title: Text(title),
           

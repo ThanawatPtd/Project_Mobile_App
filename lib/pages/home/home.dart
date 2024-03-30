@@ -6,6 +6,7 @@ import 'package:project_mobile_app/pages/list/list.dart';
 import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/pages/summary/summary.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
+import 'package:project_mobile_app/widgets/colors.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,16 +17,21 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List WidgetOption = [HomePage(), ListPage(), Summary(), Setting()];
-
   List namePage = ["Home", "list", "Summary", "Setting"];
   int pageIndex = 0;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+          floatingActionButton:pageIndex == 1 ? 
+            FloatingActionButton(
+              onPressed: () {Navigator.pushNamed(context, 'create_record');},
+              child: const Icon(Icons.add,color: Colors.white,),
+              backgroundColor: CustomColor.primaryColor,
+            ) : null,
       backgroundColor: Color.fromARGB(255, 243, 243, 243),
       appBar: CustomAppBar(
-        title: namePage[pageIndex],
+        title: namePage[pageIndex],checkPop: false,
       ),
       // AppBar(
       //   backgroundColor: Color.fromARGB(255, 77, 145, 90),

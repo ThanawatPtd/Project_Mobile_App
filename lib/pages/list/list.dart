@@ -69,7 +69,7 @@ class ListPageState extends State<ListPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var recordList = snapshot.data?.docs ?? [];
-                  var todayRecordList = recordService.checkToday(recordList);
+                  var todayRecordList = recordService.checkTime(recordList, "today");
                   return Expanded(
                       child: TabBarView(children: [
                     ListView.builder(
@@ -80,9 +80,10 @@ class ListPageState extends State<ListPage> {
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
                         String amount = data['Amount'].toString();
+                        String type = data['Type'];
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(amount: amount),
+                          child: RecordCard(amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
                         );
                       },
                     ),
@@ -94,9 +95,10 @@ class ListPageState extends State<ListPage> {
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
                         String amount = data['Amount'].toString();
+                        String type = data['Type'];
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(amount: amount),
+                          child: RecordCard(amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
                         );
                       },
                     ),

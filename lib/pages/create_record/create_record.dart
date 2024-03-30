@@ -1,6 +1,10 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/home_widgets.dart';
@@ -14,10 +18,13 @@ class CreateRecord extends StatefulWidget {
 
 class _CreateRecordState extends State<CreateRecord> {
   TextEditingController moneyController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
   String? timeText;
   DateTime? date;
-  var format = DateFormat("EEE, d/M/y");
+  var format = DateFormat("yyyy-MM-dd");
   String dropDownValue = "Income";
+
+  RecordService recordService = RecordService();
 
   @override
   initState() {
@@ -28,7 +35,10 @@ class _CreateRecordState extends State<CreateRecord> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: "Create Record"),
+        appBar: CustomAppBar(
+          title: "Create Record",
+          checkPop: true,
+        ),
         backgroundColor: CustomColor.backgroundColor,
         body: Center(
             child: ListView(
@@ -68,8 +78,8 @@ class _CreateRecordState extends State<CreateRecord> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
-                      child: customTextField(moneyController, "Amount",
-                          TextInputType.number, 50),
+                      child: customTextField(
+                          moneyController, "Amount", TextInputType.number, 50),
                     ),
                   ],
                 ),
@@ -100,6 +110,27 @@ class _CreateRecordState extends State<CreateRecord> {
                                 const MaterialStatePropertyAll(Colors.white)),
                         onPressed: () async {
                           date = await showDatePicker(
+                              builder: (context, child) {
+                                return Theme(
+                                  data: Theme.of(context).copyWith(
+                                    colorScheme: const ColorScheme.light(
+                                      primary: Color.fromARGB(255, 77, 145, 90), // header background color
+                                      onPrimary:
+                                          Colors.white, // header text color
+                                      onSurface:
+                                          Colors.black,
+                                       // body text color
+                                    ),
+                                    textButtonTheme: TextButtonThemeData(
+                                      style: TextButton.styleFrom(
+                                        foregroundColor:
+                                            Colors.black, // button text color
+                                      ),
+                                    ),
+                                  ),
+                                  child: child!,
+                                );
+                              },
                               context: context,
                               initialDate: DateTime.now(),
                               firstDate: DateTime(2003),
@@ -139,7 +170,7 @@ class _CreateRecordState extends State<CreateRecord> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
                       child: customTextField(
-                          moneyController, "", TextInputType.multiline, 70),
+                          descriptionController, "", TextInputType.multiline, 70),
                     ),
                   ],
                 ),
@@ -169,6 +200,15 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
+            ElevatedButton(onPressed: () {
+              // recordService.addRecord("Food",double.parse(moneyController.text),timeText!, descriptionController.text, dropDownValue);
+
+              moneyController.clear();
+              descriptionController.clear();
+
+              Navigator.pop(context);
+
+            }, child: Text("Comfirm")),
           ],
         )));
   }
