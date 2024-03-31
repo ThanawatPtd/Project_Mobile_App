@@ -90,19 +90,18 @@ class Summary extends StatelessWidget {
                         GraphSummary(recordTypeList: totalList,recordList: recordList,field: "Type",kind: "Total"),
                         Container(
                           padding: EdgeInsets.all(20.h),
-                          child: SizedBox(
-                            height: 200.h,
-                            child: ListView.builder(
-                              itemCount: totalList.length,
-                              itemBuilder: (context, index) {
-                                num TotalAmount = recordService.sumTypeAmount(recordList, totalList[index]);
-                            
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 5.h),
-                                  child: RecordCard(name: totalList[index],amount: TotalAmount, color: totalList[index] == "Income" ? CustomColor.primaryColor : Color.fromARGB(255, 255, 25, 25)),
-                                );
-                              },),
-                          ),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: totalList.length,
+                            itemBuilder: (context, index) {
+                              num TotalAmount = recordService.sumTypeAmount(recordList, totalList[index]);
+                          
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 5.h),
+                                child: RecordCard(name: totalList[index],amount: TotalAmount, color: totalList[index] == "Income" ? CustomColor.primaryColor : Color.fromARGB(255, 255, 25, 25)),
+                              );
+                            },),
                         )
                       ],
                     )),
@@ -111,20 +110,19 @@ class Summary extends StatelessWidget {
                         GraphSummary(recordTypeList: incomeList,recordList: recordList,field: "Category",kind: "Income"),
                         Container(
                           padding: EdgeInsets.all(20.h),
-                          child: SizedBox(
-                            height: 200.h,
-                            child: ListView.builder(
-                              itemCount: incomeList.length,
-                              itemBuilder: (context, index) {
-                                List filtterRecordList = recordService.filtterRecordCategory(recordList, incomeList[index]);
-                                num TotalAmount = recordService.sumTypeAmount(filtterRecordList, "Income");
-                            
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 5.h),
-                                  child: RecordCard(name: incomeList[index],amount: TotalAmount, color: CustomColor.primaryColor),
-                                );
-                              },),
-                          ),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: incomeList.length,
+                            itemBuilder: (context, index) {
+                              List filtterRecordList = recordService.filtterRecordCategory(recordList, incomeList[index]);
+                              num TotalAmount = recordService.sumTypeAmount(filtterRecordList, "Income");
+                          
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 5.h),
+                                child: RecordCard(name: incomeList[index],amount: TotalAmount, color: CustomColor.primaryColor),
+                              );
+                            },),
                         )
                       ],
                     )),
@@ -133,20 +131,19 @@ class Summary extends StatelessWidget {
                         GraphSummary(recordTypeList: expenseList,recordList: recordList,field: "Category",kind: "Expense"),
                         Container(
                           padding: EdgeInsets.all(20.h),
-                          child: SizedBox(
-                            height: 200.h,
-                            child: ListView.builder(
-                              itemCount: expenseList.length,
-                              itemBuilder: (context, index) {
-                                List filtterRecordList = recordService.filtterRecordCategory(recordList, expenseList[index]);
-                                num TotalAmount = recordService.sumTypeAmount(filtterRecordList, "Expense");
-                            
-                                return Padding(
-                                  padding: EdgeInsets.only(bottom: 5.h),
-                                  child: RecordCard(name: expenseList[index],amount: TotalAmount, color: Color.fromARGB(255, 255, 25, 25)),
-                                );
-                              },),
-                          ),
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: expenseList.length,
+                            itemBuilder: (context, index) {
+                              List filtterRecordList = recordService.filtterRecordCategory(recordList, expenseList[index]);
+                              num TotalAmount = recordService.sumTypeAmount(filtterRecordList, "Expense");
+                          
+                              return Padding(
+                                padding: EdgeInsets.only(bottom: 5.h),
+                                child: RecordCard(name: expenseList[index],amount: TotalAmount, color: Color.fromARGB(255, 255, 25, 25)),
+                              );
+                            },),
                         )
                       ],
                     ))]));

@@ -80,6 +80,7 @@ class GraphSummary extends StatelessWidget {
             padding: EdgeInsets.only(left: 15.h,bottom: 15.h),
             child: 
             Container(
+              height: 75.h,
               child: 
             ListView.builder(
               shrinkWrap: true,

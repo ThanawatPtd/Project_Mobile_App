@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:project_mobile_app/services/category_service.dart';
+import 'package:project_mobile_app/services/home_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
@@ -30,6 +31,7 @@ class _CreateRecordState extends State<CreateRecord> {
 
   RecordService recordService = RecordService();
   CategoryService categoryService = CategoryService();
+  HomeService homeService = HomeService();
 
   @override
   initState() {
@@ -270,18 +272,59 @@ class _CreateRecordState extends State<CreateRecord> {
               )),
             ),
             ElevatedButton(
-                onPressed: () {
-                  recordService.addRecord(
+                onPressed: ()async {
+                  try{
+                  await recordService.addRecord(
                       dropDownCategory,
                       timeText!,
                       descriptionController.text,
                       dropDownValue,
                       relatedController.text,
                       amount:double.parse(moneyController.text));
+                  await homeService.updateAmount(double.parse(moneyController.text), dropDownValue);
+
                   moneyController.clear();
                   descriptionController.clear();
 
                   Navigator.pop(context);
+                  }
+                  on FormatException catch (e) {
+                     showDialog(
+                      barrierColor: Colors.black.withOpacity(0.6),
+                      barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      context: context, 
+                      builder: (context){
+                        return AlertDialog(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          icon: Icon(Icons.error),
+                          iconColor: Colors.white,
+                          contentTextStyle: TextStyle(color: Colors.white,),
+                          titleTextStyle: TextStyle(color: Colors.white,),
+                          title: Text("Invalid Money Format"),
+                          content: Text("Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
+                          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: TextStyle(color: Colors.white,),))],
+                        );}
+                      ,);}
+                catch(e){
+                  showDialog(
+                      barrierColor: Colors.black.withOpacity(0.6),
+                      barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      context: context, 
+                      builder: (context){
+                        return AlertDialog(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          icon: Icon(Icons.error),
+                          iconColor: Colors.white,
+                          contentTextStyle: TextStyle(color: Colors.white,),
+                          titleTextStyle: TextStyle(color: Colors.white,),
+                          title: Text("Error"),
+                          content: Text("An unexpected error occurred: $e"),
+                          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: TextStyle(color: Colors.white,),))],
+                        );}
+                      ,);
+                }
                 },
                 child: Text("Comfirm")),
           ],
