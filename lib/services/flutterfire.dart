@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:project_mobile_app/models/appicon.dart';
+import 'package:project_mobile_app/services/category_service.dart';
 
 Future<bool> signIn(String email, String password) async {
   try {
@@ -24,6 +26,11 @@ Future<bool> register(String username, String email, String password) async {
         .collection("Users")
         .doc(userId)
         .set({"Email": email, "Username": username, "Amount": 0});
+    CategoryService categoryService = CategoryService();
+    categoryService.setCategory();
+    for(int i = 0;i < 20;i++){
+      categoryService.addCategory(iconNameList[i], iconNameList[i]);
+    }
     FirebaseAuth.instance.signOut();
     return true;
   } on FirebaseAuthException catch (e) {

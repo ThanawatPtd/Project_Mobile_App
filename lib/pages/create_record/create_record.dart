@@ -202,8 +202,8 @@ class _CreateRecordState extends State<CreateRecord> {
                               },
                               context: context,
                               initialDate: DateTime.now(),
-                              firstDate: DateTime(2003),
-                              lastDate: DateTime(2025));
+                              firstDate: DateTime(2020),
+                              lastDate: DateTime.now());
                           setState(() {
                             timeText = format.format(date!);
                           });
