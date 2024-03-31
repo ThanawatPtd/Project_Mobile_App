@@ -32,21 +32,25 @@ class HomePage extends StatelessWidget {
                       Center(child: WalletCard(money: snapshot1.data!),),
                       SizedBox(height: 20.h,),
                       Padding(padding: EdgeInsets.only(left: 20.h, right: 20.h), child: Align(alignment: Alignment.centerLeft,child: Text("Today",style: TextStyle(fontSize: 18.h),textAlign: TextAlign.left,),),),
-                      Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: recordService.sumAmount(todayRecordList, "Income"),expense: recordService.sumAmount(todayRecordList, "Expense"),),),
+                      Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: recordService.sumTypeAmount(todayRecordList ,"Income"),expense: recordService.sumTypeAmount(todayRecordList, "Expense"),),),
                       Padding(padding: EdgeInsets.only(left: 20.h, right: 20.h), child: Align(alignment: Alignment.centerLeft,child: Text("Month",style: TextStyle(fontSize: 18.h),textAlign: TextAlign.left,),),),
-                      Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: recordService.sumAmount(thisMonthRecordList, "Income"),expense: recordService.sumAmount(thisMonthRecordList, "Expense"),),),
+                      Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: recordService.sumTypeAmount(thisMonthRecordList, "Income"),expense: recordService.sumTypeAmount(thisMonthRecordList,"Expense"),),),
                       Padding(padding: EdgeInsets.only(left: 20.h, right: 20.h), child: Align(alignment: Alignment.centerLeft,child: Text("Year",style: TextStyle(fontSize: 18.h),textAlign: TextAlign.left,),),),
-                      Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: recordService.sumAmount(thisYearRecordList, "Income"),expense: recordService.sumAmount(thisYearRecordList, "Expense"),),),
+                      Padding(padding: EdgeInsets.all(10.h), child: ListCategory(income: recordService.sumTypeAmount(thisYearRecordList, "Income"),expense: recordService.sumTypeAmount(thisYearRecordList,"Expense"),),),
                     ],
                     );
               }
               else{
-                return const CircularProgressIndicator();
+                return Align(
+                  alignment: AlignmentDirectional.center,
+                  child: CircularProgressIndicator());
               }
             });
           }
           else {
-            return const CircularProgressIndicator();
+            return Align(
+              alignment: AlignmentDirectional.center,
+              child: CircularProgressIndicator());
           }
         },),
       ),],);

@@ -85,11 +85,12 @@ class ListPageState extends State<ListPage> {
                         DocumentSnapshot doucument = recordList[index];
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
-                        String amount = data['Amount'].toString();
+                        num amount = data['Amount'];
                         String type = data['Type'];
+                        String category = data['Category'];
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
+                          child: RecordCard(name: category,amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
                         );
                       },
                     ),
@@ -100,11 +101,12 @@ class ListPageState extends State<ListPage> {
                         DocumentSnapshot doucument = todayRecordList[index];
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
-                        String amount = data['Amount'].toString();
+                        num amount = data['Amount'];
                         String type = data['Type'];
+                        String category = data['Category'];
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
+                          child: RecordCard(name: category,amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
                         );
                       },
                     ),

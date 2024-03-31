@@ -20,7 +20,8 @@ class _SettingState extends State<Setting> {
     return Container(
         child: Center(
       child: FutureBuilder(
-        builder: (context, snapshot) {
+        builder: (context, snapshot
+        ) {
           if (snapshot.hasData) {
             return Column(
               children: [
