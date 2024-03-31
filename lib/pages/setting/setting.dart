@@ -45,204 +45,193 @@ class _SettingState extends State<Setting> {
                       style: TextStyle(color: CustomColor.primaryColor),
                     ),
                   ),
-                  GestureDetector(
-                    child: settingButton("Password", Icon(Icons.arrow_right)),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: Container(
-                                height: 300,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text("Change Password"),
-                                    textFieldSetting(
-                                        "Old Password", oldPasswordController),
-                                    textFieldSetting(
-                                        "New Password", newPasswordController),
-                                    textFieldSetting("Confirm Password",
-                                        confirmPasswordController),
-                                    ElevatedButton(
-                                        onPressed: () async {
-                                          if (newPasswordController.text ==
-                                              confirmPasswordController.text) {
-                                            Future<bool> changePasswordPass =
-                                                changePassword(
-                                                    oldPasswordController.text,
-                                                    newPasswordController.text);
-                                            bool passwordChangeSuccess =
-                                                await changePasswordPass; // Wait for result
-                                            if (passwordChangeSuccess) {
-                                              Navigator.pop(
-                                                  context); // Close dialog
+                  settingButton("Password", Icon(Icons.arrow_right), () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: Container(
+                              height: 300,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text("Change Password"),
+                                  textFieldSetting(
+                                      "Old Password", oldPasswordController),
+                                  textFieldSetting(
+                                      "New Password", newPasswordController),
+                                  textFieldSetting("Confirm Password",
+                                      confirmPasswordController),
+                                  ElevatedButton(
+                                      onPressed: () async {
+                                        if (newPasswordController.text ==
+                                            confirmPasswordController.text) {
+                                          Future<bool> changePasswordPass =
+                                              changePassword(
+                                                  oldPasswordController.text,
+                                                  newPasswordController.text);
+                                          bool passwordChangeSuccess =
+                                              await changePasswordPass; // Wait for result
+                                          if (passwordChangeSuccess) {
+                                            Navigator.pop(
+                                                context); // Close dialog
 
-                                              // Show successful password change dialog
-                                              showDialog(
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return AlertDialog(
-                                                      content: Text(
-                                                        "Change Password Successful",
-                                                      ),
-                                                      actions: [
-                                                        Center(
-                                                          child: ElevatedButton(
-                                                            style: ElevatedButton.styleFrom(
-                                                                backgroundColor:
-                                                                    CustomColor
-                                                                        .primaryColor,
-                                                                foregroundColor:
-                                                                    Colors
-                                                                        .white),
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context); // Close AlertDialog
-                                                            },
-                                                            child: Text("OK"),
-                                                          ),
-                                                        )
-                                                      ],
-                                                    );
-                                                  });
-                                            }
+                                            // Show successful password change dialog
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDialog(
+                                                    content: Text(
+                                                      "Change Password Successful",
+                                                    ),
+                                                    actions: [
+                                                      Center(
+                                                        child: ElevatedButton(
+                                                          style: ElevatedButton.styleFrom(
+                                                              backgroundColor:
+                                                                  CustomColor
+                                                                      .primaryColor,
+                                                              foregroundColor:
+                                                                  Colors.white),
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context); // Close AlertDialog
+                                                          },
+                                                          child: Text("OK"),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  );
+                                                });
                                           }
-                                        },
-                                        child: Text("Confirm Password"),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor:
-                                              CustomColor.primaryColor,
-                                          foregroundColor: Colors.white,
-                                        )),
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                  ),
-                  GestureDetector(
-                    child: settingButton("Category", Icon(Icons.arrow_right)),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10))),
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text("Category"),
-                                          smallButton(
-                                              () => Navigator.pop(context),
-                                              Colors.red,
-                                              Colors.white,
-                                              Icon(
-                                                Icons.close,
-                                                color: Colors.white,
-                                              ))
-                                        ],
-                                      ),
-                                    ),
-                                    StreamBuilder(
-                                      stream: categoryService.getCategories(),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasData) {
-                                          categoryList =
-                                              snapshot.data!.docs ?? [];
-                                          return Expanded(
-                                              child: GridView.builder(
-                                                  gridDelegate:
-                                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                                    crossAxisCount: 2,
-                                                  ),
-                                                  itemCount:
-                                                      categoryList.length,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    DocumentSnapshot
-                                                        documentSnapshot =
-                                                        categoryList[index];
-                                                    Map<String, dynamic> data =
-                                                        documentSnapshot.data()
-                                                            as Map<String,
-                                                                dynamic>;
-                                                    String categoryName =
-                                                        data["CategoryName"];
-                                                        String categoryIcon = data["IconName"];
-                                                    return GestureDetector(
-                                                      child: categoryCard(
-                                                          categoryName,categoryIcon),
-                                                      onTap: () {},
-                                                    );
-                                                  }));
-                                        } else {
-                                          return CircularProgressIndicator();
                                         }
                                       },
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      child: Text("Confirm Password"),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor:
+                                            CustomColor.primaryColor,
+                                        foregroundColor: Colors.white,
+                                      )),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  }),
+                  settingButton("Category", Icon(Icons.arrow_right), () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Dialog(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: smallButton(
-                                              () => Navigator.pop(context),
-                                              CustomColor.primaryColor,
-                                              Colors.white,
-                                              Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              )),
-                                        ),
+                                        Text("Category"),
+                                        smallButton(
+                                            () => Navigator.pop(context),
+                                            Colors.red,
+                                            Colors.white,
+                                            Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                            ))
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
-                    },
-                  ),
-                  GestureDetector(
-                    child: settingButton(
-                        "App information", Icon(Icons.arrow_right)),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Theme(
-                                data: Theme.of(context).copyWith(
-                                    textButtonTheme: TextButtonThemeData(
-                                        style: TextButton.styleFrom(
-                                            foregroundColor:
-                                                CustomColor.primaryColor))),
-                                child: AboutDialog(
+                                  ),
+                                  StreamBuilder(
+                                    stream: categoryService.getCategories(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasData) {
+                                        categoryList =
+                                            snapshot.data!.docs ?? [];
+                                        return Expanded(
+                                            child: GridView.builder(
+                                                gridDelegate:
+                                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                                  crossAxisCount: 2,
+                                                ),
+                                                itemCount: categoryList.length,
+                                                itemBuilder: (context, index) {
+                                                  DocumentSnapshot
+                                                      documentSnapshot =
+                                                      categoryList[index];
+                                                  Map<String, dynamic> data =
+                                                      documentSnapshot.data()
+                                                          as Map<String,
+                                                              dynamic>;
+                                                  String categoryName =
+                                                      data["CategoryName"];
+                                                  String categoryIcon =
+                                                      data["IconName"];
+                                                  return GestureDetector(
+                                                    child: categoryCard(
+                                                        categoryName,
+                                                        categoryIcon),
+                                                    onTap: () {},
+                                                  );
+                                                }));
+                                      } else {
+                                        return CircularProgressIndicator();
+                                      }
+                                    },
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      Column(
-                                        children: [
-                                          Text("Developed By"),
-                                          Text("Thanawat Potidet "),
-                                          Text("Chutipong Triyasith")
-                                        ],
-                                      )
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: smallButton(
+                                            () => Navigator.pop(context),
+                                            CustomColor.primaryColor,
+                                            Colors.white,
+                                            Icon(
+                                              Icons.add,
+                                              color: Colors.white,
+                                            )),
+                                      ),
                                     ],
-                                    applicationName: "Project Mobile App",
-                                    applicationVersion: "version: 0.0.1"));
-                          });
-                    },
-                  ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        });
+                  }),
+                  settingButton("App information", Icon(Icons.arrow_right), () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Theme(
+                              data: Theme.of(context).copyWith(
+                                  textButtonTheme: TextButtonThemeData(
+                                      style: TextButton.styleFrom(
+                                          foregroundColor:
+                                              CustomColor.primaryColor))),
+                              child: AboutDialog(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text("Developed By"),
+                                        Text("Thanawat Potidet "),
+                                        Text("Chutipong Triyasith")
+                                      ],
+                                    )
+                                  ],
+                                  applicationName: "Project Mobile App",
+                                  applicationVersion: "version: 0.0.1"));
+                        });
+                  }),
                   SizedBox(
                     height: 380,
                   ),
@@ -308,30 +297,33 @@ class _SettingState extends State<Setting> {
   }
 }
 
-Widget settingButton(String text, Icon icon) {
-  return Padding(
-    padding: const EdgeInsets.all(5.0),
-    child: Column(children: [
-      Container(
-        width: 325.w,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Text(text),
-            ),
-            icon
-          ],
+Widget settingButton(String text, Icon icon, Function() function) {
+  return GestureDetector(
+    onTap: function,
+    child: Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Column(children: [
+        Container(
+          width: 325.w,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Text(text),
+              ),
+              icon
+            ],
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Divider(
-          height: 1,
-        ),
-      )
-    ]),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Divider(
+            height: 1,
+          ),
+        )
+      ]),
+    ),
   );
 }
 
@@ -385,8 +377,15 @@ Widget categoryCard(String categoryName, String categoryIcon) {
       height: 80.h,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center,
-          children: [SvgPicture.asset("assets/icons/${categoryIcon}.svg",width: 50.w,height: 50.h,),
+        child: Center(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset(
+              "assets/icons/${categoryIcon}.svg",
+              width: 50.w,
+              height: 50.h,
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(categoryName),
