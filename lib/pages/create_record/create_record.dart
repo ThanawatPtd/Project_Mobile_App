@@ -322,16 +322,3 @@ Widget customTextField(TextEditingController controller, String text,
     ),
   );
 }
-
-Widget categoryCard(String categoryName) {
-  return Container(
-    decoration:
-        BoxDecoration(border: Border.all(width: 1, color: Colors.green)),
-    width: 100.w,
-    height: 100.h,
-    child: Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Center(child: Text(categoryName)),
-    ),
-  );
-}

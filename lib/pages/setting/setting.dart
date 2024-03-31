@@ -3,11 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_mobile_app/services/category_service.dart';
-import 'package:project_mobile_app/utils/buttonfunction.dart';
-import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/services/flutterfire.dart';
-import 'package:project_mobile_app/widgets/home_widgets.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
@@ -146,17 +143,69 @@ class _SettingState extends State<Setting> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text("Category"),
-                                          smallButton(() => Navigator.pop(context), Colors.red, Colors.white, Icon(Icons.close,color: Colors.white,))
+                                          smallButton(
+                                              () => Navigator.pop(context),
+                                              Colors.red,
+                                              Colors.white,
+                                              Icon(
+                                                Icons.close,
+                                                color: Colors.white,
+                                              ))
                                         ],
                                       ),
                                     ),
                                     StreamBuilder(
                                       stream: categoryService.getCategories(),
                                       builder: (context, snapshot) {
-                                        return Container();
+                                        if (snapshot.hasData) {
+                                          categoryList =
+                                              snapshot.data!.docs ?? [];
+                                          return Expanded(
+                                              child: GridView.builder(
+                                                  gridDelegate:
+                                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 2,
+                                                  ),
+                                                  itemCount:
+                                                      categoryList.length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    DocumentSnapshot
+                                                        documentSnapshot =
+                                                        categoryList[index];
+                                                    Map<String, dynamic> data =
+                                                        documentSnapshot.data()
+                                                            as Map<String,
+                                                                dynamic>;
+                                                    String categoryName =
+                                                        data["CategoryName"];
+                                                    return GestureDetector(
+                                                      child: categoryCard(
+                                                          categoryName),
+                                                      onTap: () {},
+                                                    );
+                                                  }));
+                                        } else {
+                                          return CircularProgressIndicator();
+                                        }
                                       },
                                     ),
-                                    smallButton(() => Navigator.pop(context),CustomColor.primaryColor,Colors.white,Icon(Icons.check,color: Colors.white,)),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: smallButton(
+                                              () => Navigator.pop(context),
+                                              CustomColor.primaryColor,
+                                              Colors.white,
+                                              Icon(
+                                                Icons.add,
+                                                color: Colors.white,
+                                              )),
+                                        ),
+                                      ],
+                                    ),
                                   ],
                                 ),
                               ),
@@ -311,14 +360,31 @@ Widget logoutButton(String text, Color color) {
   );
 }
 
-Widget smallButton(Function() function, Color containerColor, Color iconColor,Icon icon) {
+Widget smallButton(
+    Function() function, Color containerColor, Color iconColor, Icon icon) {
   return Container(
     decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: containerColor),
+        borderRadius: BorderRadius.circular(10), color: containerColor),
     child: IconButton(
       icon: icon,
       onPressed: function,
+    ),
+  );
+}
+
+Widget categoryCard(String categoryName) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Container(
+      decoration: BoxDecoration(
+          border: Border.all(width: 1, color: Colors.green),
+          borderRadius: BorderRadius.circular(5)),
+      width: 100.w,
+      height: 100.h,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(child: Text(categoryName)),
+      ),
     ),
   );
 }
