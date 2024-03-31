@@ -11,11 +11,12 @@ import 'package:project_mobile_app/pages/summary/summary.dart';
 import 'package:project_mobile_app/pages/welcome/bloc/welcomeBloc.dart';
 import 'package:project_mobile_app/pages/welcome/welcome.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:project_mobile_app/test.dart';
 import 'firebase_options.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  initializeFirebase();
+  await initializeFirebase();
   runApp(const MyApp());
 }
 
@@ -42,7 +43,7 @@ class MyApp extends StatelessWidget {
                   highlightColor: Colors.transparent,
                 ),
                 debugShowCheckedModeBanner: false,
-                home: Login(),
+                home: TestPage(),
                 routes: {
                   'login': (context) => const Login(),
                   'signup': (context) => const Signup(),
