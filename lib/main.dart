@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
           builder: (context, child) => MaterialApp(
                 theme: ThemeData(
+                  textTheme: TextTheme(),
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                 ),

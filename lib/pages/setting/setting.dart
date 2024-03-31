@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/services/flutterfire.dart';
@@ -19,12 +20,12 @@ class _SettingState extends State<Setting> {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final CategoryService categoryService = CategoryService();
-  late final categoryList;
+  late List categoryList;
 
   @override
   initState() {
-    super.initState();
     categoryService.setCategory();
+    super.initState();
   }
 
   @override
@@ -179,9 +180,10 @@ class _SettingState extends State<Setting> {
                                                                 dynamic>;
                                                     String categoryName =
                                                         data["CategoryName"];
+                                                        String categoryIcon = data["IconName"];
                                                     return GestureDetector(
                                                       child: categoryCard(
-                                                          categoryName),
+                                                          categoryName,categoryIcon),
                                                       onTap: () {},
                                                     );
                                                   }));
@@ -372,18 +374,25 @@ Widget smallButton(
   );
 }
 
-Widget categoryCard(String categoryName) {
+Widget categoryCard(String categoryName, String categoryIcon) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Container(
       decoration: BoxDecoration(
           border: Border.all(width: 1, color: Colors.green),
           borderRadius: BorderRadius.circular(5)),
-      width: 100.w,
-      height: 100.h,
+      width: 80.w,
+      height: 80.h,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Center(child: Text(categoryName)),
+        child: Center(child: Column(mainAxisAlignment: MainAxisAlignment.center,
+          children: [SvgPicture.asset("assets/icons/${categoryIcon}.svg",width: 50.w,height: 50.h,),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(categoryName),
+            ),
+          ],
+        )),
       ),
     ),
   );
