@@ -6,18 +6,18 @@ class RecordService {
   late String userId = FirebaseAuth.instance.currentUser!.uid;
   late CollectionReference record;
 
-  Stream<QuerySnapshot> getRecordStream() {
-    final recordStream = record.snapshots();
-
-    return recordStream;
-  }
-
   void setRecord() {
     record = FirebaseFirestore.instance
         .collection('Users')
         .doc(userId)
         .collection('Record');
   }
+  Stream<QuerySnapshot> getRecordStream() {
+    final recordStream = record.snapshots();
+
+    return recordStream;
+  }
+
 
   List checkTime(List recordList, String type) {
     List newRecordList = [];
@@ -60,24 +60,16 @@ class RecordService {
     return total;
   }
 
-  Future<void> addRecord1(
-      String category, String datetime, String description, String type) {
+  Future<void> addRecord(
+      String category, String datetime, String description, String type,String related, {num? amount}) {
     return record.add({
       'Category': category,
+      'Amount': amount ?? 0,
       'Date': datetime,
       'Description': description,
+      'Related People': related,
       'Type': type
     });
   }
 
-  Future<void> addRecord(String category, num amount, String datetime,
-      String description, String type) {
-    return record.add({
-      'Category': category,
-      'Amount': amount,
-      'Date': datetime,
-      'Description': description,
-      'Type': type
-    });
-  }
 }

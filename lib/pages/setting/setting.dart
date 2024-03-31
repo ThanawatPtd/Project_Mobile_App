@@ -2,50 +2,233 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:project_mobile_app/services/category_service.dart';
+import 'package:project_mobile_app/utils/buttonfunction.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
+import 'package:project_mobile_app/services/flutterfire.dart';
+import 'package:project_mobile_app/widgets/home_widgets.dart';
 
 class Setting extends StatefulWidget {
   const Setting({super.key});
 
   @override
-  State<Setting> createState() => _SettingState();  
+  State<Setting> createState() => _SettingState();
 }
 
 class _SettingState extends State<Setting> {
   final uid = FirebaseAuth.instance.currentUser!.uid;
+  final oldPasswordController = TextEditingController();
+  final newPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final CategoryService categoryService = CategoryService();
+  late final categoryList;
+
+  @override
+  initState() {
+    super.initState();
+    categoryService.setCategory();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: Center(
-      child: FutureBuilder(
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(snapshot.data!,style: TextStyle(color: CustomColor.primaryColor),),
-                ),
-                settingButton("Password", Icon(Icons.arrow_right)),
-                settingButton("Category", Icon(Icons.arrow_right)),
-                settingButton("App information", Icon(Icons.arrow_right)),
-                SizedBox(height: 380,),
-                GestureDetector(child: logoutButton("Logout", CustomColor.primaryColor), onTap: () {
-                  FirebaseAuth.instance.signOut();
-                  Navigator.pop(context);
-                },),
-                
-              ],
-            );
-          } else {
-            return CircularProgressIndicator();
-          }
-        },
-        future: getUsername(),
+        child: SingleChildScrollView(
+      child: Center(
+        child: FutureBuilder(
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      snapshot.data!,
+                      style: TextStyle(color: CustomColor.primaryColor),
+                    ),
+                  ),
+                  GestureDetector(
+                    child: settingButton("Password", Icon(Icons.arrow_right)),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: Container(
+                                height: 300,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text("Change Password"),
+                                    textFieldSetting(
+                                        "Old Password", oldPasswordController),
+                                    textFieldSetting(
+                                        "New Password", newPasswordController),
+                                    textFieldSetting("Confirm Password",
+                                        confirmPasswordController),
+                                    ElevatedButton(
+                                        onPressed: () async {
+                                          if (newPasswordController.text ==
+                                              confirmPasswordController.text) {
+                                            Future<bool> changePasswordPass =
+                                                changePassword(
+                                                    oldPasswordController.text,
+                                                    newPasswordController.text);
+                                            bool passwordChangeSuccess =
+                                                await changePasswordPass; // Wait for result
+                                            if (passwordChangeSuccess) {
+                                              Navigator.pop(
+                                                  context); // Close dialog
+
+                                              // Show successful password change dialog
+                                              showDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog(
+                                                      content: Text(
+                                                        "Change Password Successful",
+                                                      ),
+                                                      actions: [
+                                                        Center(
+                                                          child: ElevatedButton(
+                                                            style: ElevatedButton.styleFrom(
+                                                                backgroundColor:
+                                                                    CustomColor
+                                                                        .primaryColor,
+                                                                foregroundColor:
+                                                                    Colors
+                                                                        .white),
+                                                            onPressed: () {
+                                                              Navigator.pop(
+                                                                  context); // Close AlertDialog
+                                                            },
+                                                            child: Text("OK"),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    );
+                                                  });
+                                            }
+                                          }
+                                        },
+                                        child: Text("Confirm Password"),
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              CustomColor.primaryColor,
+                                          foregroundColor: Colors.white,
+                                        )),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                  ),
+                  GestureDetector(
+                    child: settingButton("Category", Icon(Icons.arrow_right)),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Dialog(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10))),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text("Category"),
+                                          smallButton(() => Navigator.pop(context), Colors.red, Colors.white, Icon(Icons.close,color: Colors.white,))
+                                        ],
+                                      ),
+                                    ),
+                                    StreamBuilder(
+                                      stream: categoryService.getCategories(),
+                                      builder: (context, snapshot) {
+                                        return Container();
+                                      },
+                                    ),
+                                    smallButton(() => Navigator.pop(context),CustomColor.primaryColor,Colors.white,Icon(Icons.check,color: Colors.white,)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          });
+                    },
+                  ),
+                  GestureDetector(
+                    child: settingButton(
+                        "App information", Icon(Icons.arrow_right)),
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return Theme(
+                                data: Theme.of(context).copyWith(
+                                    textButtonTheme: TextButtonThemeData(
+                                        style: TextButton.styleFrom(
+                                            foregroundColor:
+                                                CustomColor.primaryColor))),
+                                child: AboutDialog(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text("Developed By"),
+                                          Text("Thanawat Potidet "),
+                                          Text("Chutipong Triyasith")
+                                        ],
+                                      )
+                                    ],
+                                    applicationName: "Project Mobile App",
+                                    applicationVersion: "version: 0.0.1"));
+                          });
+                    },
+                  ),
+                  SizedBox(
+                    height: 380,
+                  ),
+                  GestureDetector(
+                    child: logoutButton("Logout", CustomColor.primaryColor),
+                    onTap: () {
+                      FirebaseAuth.instance.signOut();
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              );
+            } else {
+              return CircularProgressIndicator();
+            }
+          },
+          future: getUsername(),
+        ),
       ),
     ));
+  }
+
+  Widget textFieldSetting(String text, TextEditingController controller) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: CustomColor.primaryColor)),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: CustomColor.primaryColor)),
+          hintText: text,
+        ),
+        obscureText: true,
+      ),
+    );
   }
 
   Future<String> getUsername() async {
@@ -125,5 +308,17 @@ Widget logoutButton(String text, Color color) {
         fontSize: 16.sp,
       ),
     )),
+  );
+}
+
+Widget smallButton(Function() function, Color containerColor, Color iconColor,Icon icon) {
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: containerColor),
+    child: IconButton(
+      icon: icon,
+      onPressed: function,
+    ),
   );
 }

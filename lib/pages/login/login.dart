@@ -64,8 +64,8 @@ class _LoginState extends State<Login> {
                             bool signInPass = await signIn(
                                 // emailController.text.trim(),
                                 // passwordController.text.trim());
-                                "Thanawatptd@hotmail.com","123456"
-                            );
+                                "Thanawatptd@hotmail.com",
+                                "123456");
                             if (signInPass) {
                               Navigator.pushNamed(context, 'home'); //go to page
                             }

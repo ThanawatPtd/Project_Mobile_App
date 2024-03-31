@@ -1,9 +1,11 @@
 import 'dart:ffi';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
@@ -24,13 +26,16 @@ class _CreateRecordState extends State<CreateRecord> {
   DateTime? date;
   var format = DateFormat("yyyy-MM-dd");
   String dropDownValue = "Income";
+  String dropDownCategory = "Food";
 
   RecordService recordService = RecordService();
+  CategoryService categoryService = CategoryService();
 
   @override
   initState() {
     timeText = format.format(DateTime.now());
     recordService.setRecord();
+    categoryService.setCategory();
     super.initState();
   }
 
@@ -45,25 +50,6 @@ class _CreateRecordState extends State<CreateRecord> {
         body: Center(
             child: ListView(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: DropdownButton<String>(
-                // dropdown income expense
-                underline: Container(
-                  height: 0,
-                ),
-                value: dropDownValue,
-                items: const [
-                  DropdownMenuItem(value: "Income", child: Text("Income")),
-                  DropdownMenuItem(value: "Expense", child: Text("Expense"))
-                ],
-                onChanged: (String? value) {
-                  setState(() {
-                    dropDownValue = value!;
-                  });
-                },
-              ),
-            ),
             Padding(
               //Category
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
@@ -82,53 +68,58 @@ class _CreateRecordState extends State<CreateRecord> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.white),
-                            foregroundColor:
-                                const MaterialStatePropertyAll(Colors.grey)),
-                        onPressed: () async {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return Dialog(
-                                child: Container(
-                                  decoration:
-                                      BoxDecoration(color: Colors.white),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          FaIcon(FontAwesomeIcons.boxesPacking),
-                                          SizedBox(
-                                            width: 10.w,
-                                          ),
-                                          Text("Category"),
-                                          SizedBox(width: 155.w,),
-                                          IconButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              icon: FaIcon(
-                                                  FontAwesomeIcons.close))
-                                        ],
-                                      ),
-                                      // GridView.count(crossAxisCount: crossAxisCount)
-                                    ],
+                      child: StreamBuilder(
+                        stream: categoryService.getCategories(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return CircularProgressIndicator();
+                          } else {
+                            var categoryList = snapshot.data?.docs ?? [];
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                DropdownButton<String>(
+                                  //category button
+                                  menuMaxHeight: 100,
+                                  // dropdown category
+                                  underline: Container(
+                                    height: 0,
                                   ),
+                                  value: dropDownCategory,
+                                  items: categoryList.map((index) {
+                                    return DropdownMenuItem<String>(
+                                        child: Text(index["CategoryName"]),
+                                        value: index["CategoryName"]);
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      dropDownCategory = value!;
+                                    });
+                                  },
                                 ),
-                              );
-                            },
-                          );
+                                DropdownButton<String>(
+                                  // dropdown income expense
+                                  underline: Container(
+                                    height: 0,
+                                  ),
+                                  value: dropDownValue,
+                                  items: const [
+                                    DropdownMenuItem(
+                                        value: "Income", child: Text("Income")),
+                                    DropdownMenuItem(
+                                        value: "Expense",
+                                        child: Text("Expense"))
+                                  ],
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      dropDownValue = value!;
+                                    });
+                                  },
+                                ),
+                              ],
+                            );
+                          }
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Category"),
-                            const Icon(Icons.arrow_downward)
-                          ],
-                        ),
                       ),
                     ),
                   ],
@@ -228,7 +219,7 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
-              //description
+            //description
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomContainer(
@@ -278,8 +269,15 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
-            ElevatedButton(onPressed: () {
-              recordService.addRecord("Food",double.parse(moneyController.text),timeText!, descriptionController.text, dropDownValue);
+            ElevatedButton(
+                onPressed: () {
+                  recordService.addRecord(
+                      dropDownCategory,
+                      timeText!,
+                      descriptionController.text,
+                      dropDownValue,
+                      relatedController.text,
+                      amount:double.parse(moneyController.text));
                   moneyController.clear();
                   descriptionController.clear();
 
@@ -321,6 +319,19 @@ Widget customTextField(TextEditingController controller, String text,
           borderSide: BorderSide(color: Colors.transparent),
         ),
       ),
+    ),
+  );
+}
+
+Widget categoryCard(String categoryName) {
+  return Container(
+    decoration:
+        BoxDecoration(border: Border.all(width: 1, color: Colors.green)),
+    width: 100.w,
+    height: 100.h,
+    child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(child: Text(categoryName)),
     ),
   );
 }
