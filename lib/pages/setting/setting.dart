@@ -19,7 +19,7 @@ class _SettingState extends State<Setting> {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final CategoryService categoryService = CategoryService();
-  late final categoryList;
+  late List categoryList;
 
   @override
   initState() {
@@ -154,12 +154,12 @@ class _SettingState extends State<Setting> {
                                         ],
                                       ),
                                     ),
-                                    StreamBuilder(
+                                    StreamBuilder( //Category
                                       stream: categoryService.getCategories(),
                                       builder: (context, snapshot) {
                                         if (snapshot.hasData) {
                                           categoryList =
-                                              snapshot.data!.docs ?? [];
+                                              snapshot.data?.docs ?? [];
                                           return Expanded(
                                               child: GridView.builder(
                                                   gridDelegate:

@@ -99,7 +99,7 @@ class Summary extends StatelessWidget {
                           
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 5.h),
-                                child: RecordCard(name: totalList[index],amount: TotalAmount, color: totalList[index] == "Income" ? CustomColor.primaryColor : Color.fromARGB(255, 255, 25, 25)),
+                                child: RecordSummaryCard(name: totalList[index],amount: TotalAmount, color: totalList[index] == "Income" ? CustomColor.primaryColor : Color.fromARGB(255, 255, 25, 25)),
                               );
                             },),
                         )
@@ -117,10 +117,10 @@ class Summary extends StatelessWidget {
                             itemBuilder: (context, index) {
                               List filtterRecordList = recordService.filtterRecordCategory(recordList, incomeList[index]);
                               num TotalAmount = recordService.sumTypeAmount(filtterRecordList, "Income");
-                          
+
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 5.h),
-                                child: RecordCard(name: incomeList[index],amount: TotalAmount, color: CustomColor.primaryColor),
+                                child: RecordSummaryCard(name: incomeList[index],amount: TotalAmount, color: CustomColor.primaryColor),
                               );
                             },),
                         )
@@ -141,7 +141,7 @@ class Summary extends StatelessWidget {
                           
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 5.h),
-                                child: RecordCard(name: expenseList[index],amount: TotalAmount, color: Color.fromARGB(255, 255, 25, 25)),
+                                child: RecordSummaryCard(name: expenseList[index],amount: TotalAmount, color: Color.fromARGB(255, 255, 25, 25)),
                               );
                             },),
                         )
