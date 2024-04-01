@@ -8,17 +8,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:project_mobile_app/pages/home/home.dart';
+import 'package:project_mobile_app/pages/list/list.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/home_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/home_widgets.dart';
+import 'package:project_mobile_app/widgets/list.dart';
 
 class CreateRecord extends StatefulWidget {
-  CreateRecord({super.key, this.docId, this.updateData});
-  String? docId;
-  final VoidCallback? updateData;
+
+  CreateRecord({super.key, this.docId});
+  String? docId ;
   @override
   State<CreateRecord> createState() => _CreateRecordState();
 }
@@ -417,7 +420,6 @@ class _CreateRecordState extends State<CreateRecord> {
                       descriptionController.clear();
                       relatedController.clear();
 
-                      widget.updateData!();
                       Navigator.pop(context);
                     } on FormatException catch (e) {
                       showDialog(

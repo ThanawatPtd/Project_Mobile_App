@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+import 'package:project_mobile_app/pages/create_record/create_record.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/list.dart';
@@ -18,7 +20,7 @@ class ListPageState extends State<ListPage> {
   final RecordService recordService = RecordService();
 
   @override
-  initState(){
+  initState() {
     super.initState();
     recordService.setRecord();
   }
@@ -76,7 +78,8 @@ class ListPageState extends State<ListPage> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   var recordList = snapshot.data?.docs ?? [];
-                  var todayRecordList = recordService.checkTime(recordList, "today");
+                  var todayRecordList =
+                      recordService.checkTime(recordList, "today");
                   return Expanded(
                       child: TabBarView(children: [
                     ListView.builder(
@@ -88,10 +91,31 @@ class ListPageState extends State<ListPage> {
                             doucument.data() as Map<String, dynamic>;
                         String type = data['Type'];
                         String docId = doucument.id;
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(docId: docId,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25)),
-                        );
+                        return Slidable(
+                            startActionPane: ActionPane(
+                                motion: BehindMotion(), children: [SlidableAction(
+                                    backgroundColor: CustomColor.primaryColor,
+                                    icon: Icons.edit,
+                                    onPressed: (context) =>
+                                        {Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRecord(docId: docId,)))})]),
+                            endActionPane: ActionPane(
+                              motion: BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                    backgroundColor: Colors.red,
+                                    icon: Icons.delete,
+                                    onPressed: (context) =>
+                                        {recordService.deleteRecord(docId)})
+                              ],
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.only(bottom: 5.h),
+                              child: RecordCard(
+                                  docId: docId,
+                                  color: type == "Income"
+                                      ? Color.fromARGB(255, 77, 145, 90)
+                                      : Color.fromARGB(255, 255, 25, 25)),
+                            ));
                       },
                     ),
                     ListView.builder(
@@ -103,10 +127,31 @@ class ListPageState extends State<ListPage> {
                             doucument.data() as Map<String, dynamic>;
                         String type = data['Type'];
                         String docId = doucument.id;
-                        return Padding(
+                        return Slidable(
+                            startActionPane: ActionPane(
+                                motion: BehindMotion(), children: [SlidableAction(
+                                    backgroundColor: CustomColor.primaryColor,
+                                    icon: Icons.edit,
+                                    onPressed: (context) =>
+                                        {Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRecord(docId: docId,)))})]),
+                            endActionPane: ActionPane(
+                              motion: BehindMotion(),
+                              children: [
+                                SlidableAction(
+                                    backgroundColor: Colors.red,
+                                    icon: Icons.delete,
+                                    onPressed: (context) =>
+                                        {recordService.deleteRecord(docId)})
+                              ],
+                            ),
+                            child: Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(docId: docId,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25)),
-                          );
+                          child: RecordCard(
+                              docId: docId,
+                              color: type == "Income"
+                                  ? Color.fromARGB(255, 77, 145, 90)
+                                  : Color.fromARGB(255, 255, 25, 25)),
+                        ));
                       },
                     ),
                   ]));

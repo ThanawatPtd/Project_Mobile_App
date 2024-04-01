@@ -11,8 +11,8 @@ import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
-
+  Home({super.key,this.page});
+  int? page;
   @override
   State<Home> createState() => _HomeState();
 }
@@ -21,7 +21,14 @@ class _HomeState extends State<Home> {
   List WidgetOption = [HomePage(), ListPage(), Summary(), Setting()];
   List namePage = ["Home", "list", "Summary", "Setting"];
   int pageIndex = 0;
-  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(widget.page != null){
+      pageIndex = widget.page!;
+    }
+  }
   RecordService recordService = RecordService();
   @override
   Widget build(BuildContext context) {
