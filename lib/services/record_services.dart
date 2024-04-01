@@ -225,4 +225,8 @@ class RecordService {
       'Type': type
     });
   }
+  Future<void> deleteRecord(String docId) {
+    return record.doc(docId).delete();
+  }
+
 }

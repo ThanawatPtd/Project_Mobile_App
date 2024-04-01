@@ -5,17 +5,19 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:project_mobile_app/pages/home/home.dart';
+import 'package:project_mobile_app/pages/list/list.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/home_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/home_widgets.dart';
+import 'package:project_mobile_app/widgets/list.dart';
 
 class CreateRecord extends StatefulWidget {
-  CreateRecord({super.key, this.docId,this.updateData});
+  CreateRecord({super.key, this.docId});
   String? docId ;
-  final VoidCallback? updateData;
   @override
   State<CreateRecord> createState() => _CreateRecordState();
 }
@@ -345,9 +347,8 @@ class _CreateRecordState extends State<CreateRecord> {
                   moneyController.clear();
                   descriptionController.clear();
                   relatedController.clear();
-                  
-                  widget.updateData!();
-                  Navigator.pop(context);
+
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Home(page: 1,)));
                   }
                   on FormatException catch (e) {
                      showDialog(

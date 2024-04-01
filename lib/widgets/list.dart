@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,16 +10,16 @@ import 'package:project_mobile_app/Widgets/colors.dart';
 class RecordCard extends StatefulWidget {
   RecordCard({
     super.key,
-    required this.docId,
+    this.docId,
     // required this.name,
     // required this.amount,
-    required this.color,
+    this.color,
     // required this.date,
     // required this.description,
     // required this.relatedPeople
   });
-  String docId;
-  Color color;
+  String? docId;
+  Color? color;
   // String name;
   // Color color;
   // num amount;
@@ -50,7 +49,7 @@ class _RecordCardState extends State<RecordCard> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: recordService.getDataRecord(widget.docId),
+        future: recordService.getDataRecord(widget.docId!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Map<String, dynamic> data =
@@ -239,18 +238,6 @@ class _RecordCardState extends State<RecordCard> {
                           ),
                         ),
                         actions: [
-                          IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            CreateRecord(docId: widget.docId,updateData: updateData,)));
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                              )),
                           TextButton(
                               onPressed: () => Navigator.pop(context),
                               child: Text(
@@ -311,10 +298,10 @@ class _RecordCardState extends State<RecordCard> {
 
   void updateData() async {
     Future<DocumentSnapshot<Map<String, dynamic>>?> document =
-        recordService.getDataRecord(widget.docId);
+        recordService.getDataRecord(widget.docId!);
     DocumentSnapshot<Map<String, dynamic>>? doc = await document;
-
     Map<String, dynamic> data = doc!.data() as Map<String, dynamic>;
+
     setState(() {
       print("before => $amount");
       amount = data['Amount'];
