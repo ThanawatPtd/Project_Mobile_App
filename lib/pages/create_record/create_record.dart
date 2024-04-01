@@ -13,16 +13,19 @@ import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/home_widgets.dart';
 
 class CreateRecord extends StatefulWidget {
-  const CreateRecord({super.key});
-
+  CreateRecord({super.key, this.docId,this.updateData});
+  String? docId ;
+  final VoidCallback? updateData;
   @override
   State<CreateRecord> createState() => _CreateRecordState();
 }
 
 class _CreateRecordState extends State<CreateRecord> {
+
   TextEditingController moneyController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController relatedController = TextEditingController();
+  String? docId;
   String? timeText;
   DateTime? date;
   var format = DateFormat("yyyy-MM-dd");
@@ -39,13 +42,15 @@ class _CreateRecordState extends State<CreateRecord> {
     recordService.setRecord();
     categoryService.setCategory();
     super.initState();
+    docId = widget.docId;
+    fetchData();
   }
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
-          title: "Create Record",
+          title: docId != null ? "Edit Record" : "Create Record",
           checkPop: true,
         ),
         backgroundColor: CustomColor.backgroundColor,
@@ -273,6 +278,7 @@ class _CreateRecordState extends State<CreateRecord> {
             ),
             ElevatedButton(
                 onPressed: ()async {
+                  if (docId == null){
                   try{
                   await recordService.addRecord(
                       dropDownCategory,
@@ -281,7 +287,6 @@ class _CreateRecordState extends State<CreateRecord> {
                       dropDownValue,
                       relatedController.text,
                       amount:double.parse(moneyController.text));
-                  await homeService.updateAmount(double.parse(moneyController.text), dropDownValue);
 
                   moneyController.clear();
                   descriptionController.clear();
@@ -322,15 +327,91 @@ class _CreateRecordState extends State<CreateRecord> {
                           title: Text("Error"),
                           content: Text("An unexpected error occurred: $e"),
                           actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: TextStyle(color: Colors.white,),))],
-                        );}
+                        );
+                        }
                       ,);
+                }}
+                else {
+                  try{
+                  await recordService.updateRecord(
+                      docId!,
+                      dropDownCategory,
+                      timeText!,
+                      descriptionController.text,
+                      dropDownValue,
+                      relatedController.text,
+                      amount:double.parse(moneyController.text));
+
+                  moneyController.clear();
+                  descriptionController.clear();
+                  relatedController.clear();
+                  
+                  widget.updateData!();
+                  Navigator.pop(context);
+                  }
+                  on FormatException catch (e) {
+                     showDialog(
+                      barrierColor: Colors.black.withOpacity(0.6),
+                      barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      context: context, 
+                      builder: (context){
+                        return AlertDialog(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          icon: Icon(Icons.error),
+                          iconColor: Colors.white,
+                          contentTextStyle: TextStyle(color: Colors.white,),
+                          titleTextStyle: TextStyle(color: Colors.white,),
+                          title: Text("Invalid Money Format"),
+                          content: Text("Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
+                          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: TextStyle(color: Colors.white,),))],
+                        );}
+                      ,);}
+                catch(e){
+                  showDialog(
+                      barrierColor: Colors.black.withOpacity(0.6),
+                      barrierDismissible: true,
+                      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+                      context: context, 
+                      builder: (context){
+                        return AlertDialog(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                          icon: Icon(Icons.error),
+                          iconColor: Colors.white,
+                          contentTextStyle: TextStyle(color: Colors.white,),
+                          titleTextStyle: TextStyle(color: Colors.white,),
+                          title: Text("Error"),
+                          content: Text("An unexpected error occurred: $e"),
+                          actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK",style: TextStyle(color: Colors.white,),))],
+                        );
+                        }
+                      ,);
+                }
                 }
                 },
                 child: Text("Comfirm")),
           ],
         )));
   }
+  Future<void> fetchData() async { // Make the function async
+  Future<List?> docRecord = recordService.getRecord(docId!);
+
+  List? list = await docRecord; // Wait for the future to complete
+
+  if (list != null) { // Check if data exists
+    moneyController.text = list[0].toString();
+    dropDownCategory = list[1].toString();
+    timeText = format.format(list[2]); // Assuming format is a DateFormat instance
+    descriptionController.text = list[3].toString();
+    relatedController.text = list[4].toString();
+    dropDownValue = list[5].toString();
+  } else {
+    // Handle no data case (e.g., show error message)
+  }
 }
+
+}
+
 
 Widget customTextField(TextEditingController controller, String text,
     TextInputType inputType, int height) {

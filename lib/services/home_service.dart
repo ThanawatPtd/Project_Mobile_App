@@ -24,7 +24,7 @@ class HomeService{
     }
   }
 
-  Future<void> updateAmount(num amount, String type) async{
+  Future<void> updateAmount(num amount) async{
     final docRef = FirebaseFirestore.instance.collection("Users").doc(userId);
     DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await docRef.get();
@@ -33,16 +33,9 @@ class HomeService{
       Map<String, dynamic> data =
           documentSnapshot.data() as Map<String, dynamic>;
       // Access specific fields
-      num amountUser = data['Amount'];
       String email = data['Email'];
       String username = data['Username'];
-
-      if(type == "Income"){
-        amountUser += amount;
-      }else{
-        amountUser -=amount;
-      }
-    return docRef.update({'Amount': amountUser, 'Email': email, 'Username': username});
+    return await docRef.update({'Amount': amount, 'Email': email, 'Username': username});
     }
     return null;
   }

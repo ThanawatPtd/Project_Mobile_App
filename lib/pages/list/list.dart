@@ -83,19 +83,14 @@ class ListPageState extends State<ListPage> {
                       itemCount: recordList.length,
                       padding: EdgeInsets.all(15),
                       itemBuilder: (context, index) {
-                        DateFormat dateFormat = DateFormat("yyyy-MM-dd");
                         DocumentSnapshot doucument = recordList[index];
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
-                        num amount = data['Amount'];
-                        DateTime date = dateFormat.parse(data['Date']);
                         String type = data['Type'];
-                        String category = data['Category'];
-                        String description = data['Description'];
-                        String relatedPeople = data['Related People'];
+                        String docId = doucument.id;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(name: category,amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),date: date,description: description, relatedPeople: relatedPeople),
+                          child: RecordCard(docId: docId,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25)),
                         );
                       },
                     ),
@@ -103,19 +98,14 @@ class ListPageState extends State<ListPage> {
                       itemCount: todayRecordList.length,
                       padding: EdgeInsets.all(15),
                       itemBuilder: (context, index) {
-                        DateFormat dateFormat = DateFormat("yyyy-MM-dd");
                         DocumentSnapshot doucument = todayRecordList[index];
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
-                        num amount = data['Amount'];
-                        DateTime date = dateFormat.parse(data['Date']);
                         String type = data['Type'];
-                        String category = data['Category'];
-                        String description = data['Description'];
-                        String relatedPeople = data['Related People'];
+                        String docId = doucument.id;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(name: category,amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),date: date,description: description, relatedPeople: relatedPeople),
+                          child: RecordCard(docId: docId,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25)),
                           );
                       },
                     ),

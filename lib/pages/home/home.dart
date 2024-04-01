@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_mobile_app/pages/create_record/create_record.dart';
 import 'package:project_mobile_app/pages/home/home_page.dart';
 import 'package:project_mobile_app/pages/list/list.dart';
 import 'package:project_mobile_app/pages/setting/setting.dart';
@@ -28,7 +29,7 @@ class _HomeState extends State<Home> {
         child: Scaffold(
           floatingActionButton:pageIndex == 1 ? 
             FloatingActionButton(
-              onPressed: () {Navigator.pushNamed(context, 'create_record');},
+              onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRecord()));},
               child: const Icon(Icons.add,color: Colors.white,),
               backgroundColor: CustomColor.primaryColor,
             ) : null,

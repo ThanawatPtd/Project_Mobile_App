@@ -13,12 +13,12 @@ class RecordService {
         .doc(userId)
         .collection('Record');
   }
+
   Stream<QuerySnapshot> getRecordStream() {
     final recordStream = record.snapshots();
 
     return recordStream;
   }
-
 
   List checkTime(List recordList, String type) {
     List newRecordList = [];
@@ -61,7 +61,6 @@ class RecordService {
     return total;
   }
 
-
   num sumCategoryAmount(List recordList, String category) {
     num total = 0.00;
     for (var record in recordList) {
@@ -76,62 +75,62 @@ class RecordService {
     return total;
   }
 
-
-
-  List filttertype(List recordList, String field, String type){
+  List filttertype(List recordList, String field, String type) {
     List newRecordList = [];
     bool check = true;
-     for (var record in recordList) {
+    for (var record in recordList) {
       DocumentSnapshot doucument = record;
       Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
       String recordField = data[field];
       String recordType = data['Type'];
       check = true;
-      if (recordType == type || type == "Total"){
-        for (var types in newRecordList){
-          if(types == recordField) {
+      if (recordType == type || type == "Total") {
+        for (var types in newRecordList) {
+          if (types == recordField) {
             check = false;
           }
         }
-        if (check){
+        if (check) {
           newRecordList.add(recordField);
         }
       }
     }
-    
+
     return newRecordList;
   }
 
-  List filtterRecordType(List recordList, String type){
+  List filtterRecordType(List recordList, String type) {
     List newRecordList = [];
-     for (var record in recordList) {
+    for (var record in recordList) {
       DocumentSnapshot doucument = record;
       Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
       String recordType = data["Type"];
-      if (recordType == type || type == "Total"){
-          newRecordList.add(record);
+      if (recordType == type || type == "Total") {
+        newRecordList.add(record);
       }
     }
-    
+
     return newRecordList;
   }
 
-  List filtterRecordCategory(List recordList, String category){
+  List filtterRecordCategory(List recordList, String category) {
     List newRecordList = [];
-     for (var record in recordList) {
+    for (var record in recordList) {
       DocumentSnapshot doucument = record;
       Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
       String recordCategory = data["Category"];
-      if (recordCategory == category){
-          newRecordList.add(record);
+      if (recordCategory == category) {
+        newRecordList.add(record);
       }
     }
-    
+
     return newRecordList;
   }
 
-  double percentType(List recordList,String field,String type, String kind){
-    List filtterRecordList = field == "Category" ? filtterRecordCategory(recordList, type) : filtterRecordType(recordList, type);
+  double percentType(List recordList, String field, String type, String kind) {
+    List filtterRecordList = field == "Category"
+        ? filtterRecordCategory(recordList, type)
+        : filtterRecordType(recordList, type);
     num totalTypeAmount = sumTypeAmount(filtterRecordList, kind);
     print("total Type Amount => $totalTypeAmount");
     print("kind => $kind");
@@ -139,12 +138,71 @@ class RecordService {
     print("total Amount => $totalAmount");
     double percent = totalTypeAmount / totalAmount;
     print("percent => $percent");
-    
+
     return percent * 100;
   }
 
-  Future<void> addRecord(
-      String category, String datetime, String description, String type,String related, {num? amount}) {
+  num calculatorAmountUser(List recordList) {
+    List incomeList = filtterRecordType(recordList, "Income");
+    List expenseList = filtterRecordType(recordList, "Expense");
+    num totalIncome = sumTypeAmount(incomeList, "Income");
+    num totalExpense = sumTypeAmount(expenseList, "Expense");
+    return totalIncome - totalExpense;
+  }
+
+  Future<List?> getRecord(String docId) async {
+    final docRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Record')
+        .doc(docId);
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    // Get the document data
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await docRef.get();
+    if (documentSnapshot.exists) {
+      // Get the data as a Map
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      // Access specific fields
+      num amount = data['Amount'];
+      String Category = data['Category'];
+      DateTime date = dateFormat.parse(data['Date']);
+      String description = data['Description'];
+      String relatedPeople = data['Related People'];
+      String type = data['Type'];
+
+      List newRecordList = [];
+      newRecordList
+          .addAll([amount, Category, date, description, relatedPeople, type]);
+      return newRecordList;
+      // Use the data for your UI or logic
+    }
+    return null;
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>?> getDataRecord(
+      String docId) async {
+    final docRef = FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Record')
+        .doc(docId);
+    // Get the document data
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await docRef.get();
+    if (documentSnapshot.exists) {
+      // Get the data as a Map
+
+      return documentSnapshot;
+      // Use the data for your UI or logic
+    }
+    return null;
+  }
+
+  Future<void> addRecord(String category, String datetime, String description,
+      String type, String related,
+      {num? amount}) {
     return record.add({
       'Category': category,
       'Amount': amount ?? 0,
@@ -155,4 +213,16 @@ class RecordService {
     });
   }
 
+  Future<void> updateRecord(String docId, String category, String datetime,
+      String description, String type, String related,
+      {num? amount}) {
+    return record.doc(docId).update({
+      'Category': category,
+      'Amount': amount ?? 0,
+      'Date': datetime,
+      'Description': description,
+      'Related People': related,
+      'Type': type
+    });
+  }
 }

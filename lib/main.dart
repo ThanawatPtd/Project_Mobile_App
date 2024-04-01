@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
                   'home':(context) => const Home(),
                   'summary':(context) => Summary(),
                   'setting':(context) => const Setting(),
-                  'create_record':(context) => const CreateRecord(),
+                  'create_record':(context) => CreateRecord(),
                 },
               )),
     );
