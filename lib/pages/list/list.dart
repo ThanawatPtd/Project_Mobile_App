@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/list.dart';
@@ -85,12 +86,11 @@ class ListPageState extends State<ListPage> {
                         DocumentSnapshot doucument = recordList[index];
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
-                        num amount = data['Amount'];
                         String type = data['Type'];
-                        String category = data['Category'];
+                        String docId = doucument.id;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(name: category,amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
+                          child: RecordCard(docId: docId,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25)),
                         );
                       },
                     ),
@@ -101,13 +101,12 @@ class ListPageState extends State<ListPage> {
                         DocumentSnapshot doucument = todayRecordList[index];
                         Map<String, dynamic> data =
                             doucument.data() as Map<String, dynamic>;
-                        num amount = data['Amount'];
                         String type = data['Type'];
-                        String category = data['Category'];
+                        String docId = doucument.id;
                         return Padding(
                           padding: EdgeInsets.only(bottom: 5.h),
-                          child: RecordCard(name: category,amount: amount,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25),),
-                        );
+                          child: RecordCard(docId: docId,color: type == "Income" ? Color.fromARGB(255, 77, 145, 90) : Color.fromARGB(255, 255, 25, 25)),
+                          );
                       },
                     ),
                   ]));

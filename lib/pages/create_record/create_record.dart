@@ -4,20 +4,21 @@ import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:project_mobile_app/services/category_service.dart';
+import 'package:project_mobile_app/services/home_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/home_widgets.dart';
 
 class CreateRecord extends StatefulWidget {
-  const CreateRecord({super.key});
-
+  CreateRecord({super.key, this.docId, this.updateData});
+  String? docId;
+  final VoidCallback? updateData;
   @override
   State<CreateRecord> createState() => _CreateRecordState();
 }
@@ -26,6 +27,7 @@ class _CreateRecordState extends State<CreateRecord> {
   TextEditingController moneyController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController relatedController = TextEditingController();
+  String? docId;
   String? timeText;
   DateTime? date;
 
@@ -42,6 +44,7 @@ class _CreateRecordState extends State<CreateRecord> {
   CategoryService categoryService = CategoryService();
   FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   String uid = FirebaseAuth.instance.currentUser!.uid;
+  HomeService homeService = HomeService();
 
   @override
   initState() {
@@ -49,15 +52,19 @@ class _CreateRecordState extends State<CreateRecord> {
     recordService.setRecord();
     categoryService.setCategory();
     imageContainer = imageContainerFuction();
-    imageReference = firebaseStorage.ref().child("${uid}/${DateTime.now().millisecondsSinceEpoch}.png");
+    imageReference = firebaseStorage
+        .ref()
+        .child("${uid}/${DateTime.now().millisecondsSinceEpoch}.png");
     super.initState();
+    docId = widget.docId;
+    fetchData();
   }
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
     return Scaffold(
         appBar: CustomAppBar(
-          title: "Create Record",
+          title: docId != null ? "Edit Record" : "Create Record",
           checkPop: true,
         ),
         backgroundColor: CustomColor.backgroundColor,
@@ -311,22 +318,204 @@ class _CreateRecordState extends State<CreateRecord> {
                     final url = await imageReference.getDownloadURL();
                     imageUrl = url;
                   }
-                  recordService.addRecord(
-                      dropDownCategory,
-                      timeText!,
-                      descriptionController.text,
-                      dropDownValue,
-                      relatedController.text,
-                      amount: double.parse(moneyController.text),
-                      imageUrl: imageUrl);
-                  moneyController.clear();
-                  descriptionController.clear();
+                  if (docId == null) {
+                    try {
+                      await recordService.addRecord(
+                          dropDownCategory,
+                          timeText!,
+                          descriptionController.text,
+                          dropDownValue,
+                          relatedController.text,
+                          amount: double.parse(moneyController.text),
+                          imageUrl: imageUrl);
+                      moneyController.clear();
+                      descriptionController.clear();
 
-                  Navigator.pop(context);
+                      Navigator.pop(context);
+                    } on FormatException catch (e) {
+                      showDialog(
+                        barrierColor: Colors.black.withOpacity(0.6),
+                        barrierDismissible: true,
+                        barrierLabel: MaterialLocalizations.of(context)
+                            .modalBarrierDismissLabel,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            icon: Icon(Icons.error),
+                            iconColor: Colors.white,
+                            contentTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            titleTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            title: Text("Invalid Money Format"),
+                            content: Text(
+                                "Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "OK",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                            ],
+                          );
+                        },
+                      );
+                    } catch (e) {
+                      showDialog(
+                        barrierColor: Colors.black.withOpacity(0.6),
+                        barrierDismissible: true,
+                        barrierLabel: MaterialLocalizations.of(context)
+                            .modalBarrierDismissLabel,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            icon: Icon(Icons.error),
+                            iconColor: Colors.white,
+                            contentTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            titleTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            title: Text("Error"),
+                            content: Text("An unexpected error occurred: $e"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "OK",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  } else {
+                    try {
+                      await recordService.updateRecord(
+                          docId!,
+                          dropDownCategory,
+                          timeText!,
+                          descriptionController.text,
+                          dropDownValue,
+                          relatedController.text,
+                          amount: double.parse(moneyController.text));
+
+                      moneyController.clear();
+                      descriptionController.clear();
+                      relatedController.clear();
+
+                      widget.updateData!();
+                      Navigator.pop(context);
+                    } on FormatException catch (e) {
+                      showDialog(
+                        barrierColor: Colors.black.withOpacity(0.6),
+                        barrierDismissible: true,
+                        barrierLabel: MaterialLocalizations.of(context)
+                            .modalBarrierDismissLabel,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            icon: Icon(Icons.error),
+                            iconColor: Colors.white,
+                            contentTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            titleTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            title: Text("Invalid Money Format"),
+                            content: Text(
+                                "Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "OK",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                            ],
+                          );
+                        },
+                      );
+                    } catch (e) {
+                      showDialog(
+                        barrierColor: Colors.black.withOpacity(0.6),
+                        barrierDismissible: true,
+                        barrierLabel: MaterialLocalizations.of(context)
+                            .modalBarrierDismissLabel,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            icon: Icon(Icons.error),
+                            iconColor: Colors.white,
+                            contentTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            titleTextStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            title: Text("Error"),
+                            content: Text("An unexpected error occurred: $e"),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "OK",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+
+                  void fetchData() {}
                 },
                 child: Text("Comfirm")),
           ],
         )));
+  }
+
+  Future<void> fetchData() async {
+    // Make the function async
+    Future<List?> docRecord = recordService.getRecord(docId!);
+
+    List? list = await docRecord; // Wait for the future to complete
+
+    if (list != null) {
+      // Check if data exists
+      moneyController.text = list[0].toString();
+      dropDownCategory = list[1].toString();
+      timeText =
+          format.format(list[2]); // Assuming format is a DateFormat instance
+      descriptionController.text = list[3].toString();
+      relatedController.text = list[4].toString();
+      dropDownValue = list[5].toString();
+    } else {
+      // Handle no data case (e.g., show error message)
+    }
   }
 
   Widget onPressedCamera() {
@@ -365,40 +554,6 @@ class _CreateRecordState extends State<CreateRecord> {
     }
   }
 
-  Widget customTextField(TextEditingController controller, String text,
-      TextInputType inputType, int height) {
-    return Container(
-      decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          border: Border.all(width: 1, color: Colors.grey)),
-      width: 325.w,
-      height: height.h,
-      child: TextField(
-        controller: controller,
-        maxLines: 2,
-        keyboardType: inputType,
-        decoration: InputDecoration(
-          hintText: text,
-          hintStyle: const TextStyle(color: Colors.grey),
-          border: const OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.transparent,
-            ),
-          ),
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-          disabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget imageContainerFuction() {
     return Container(
       decoration: BoxDecoration(
@@ -426,23 +581,57 @@ class _CreateRecordState extends State<CreateRecord> {
       ),
     );
   }
+}
 
-  Widget imageButton(
-      Function() function, Icon icon, String buttonName, Color color) {
-    return GestureDetector(
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: Container(
-            width: 100.w,
-            height: 35.h,
-            decoration: BoxDecoration(
-                color: color, borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [icon, Text(buttonName)],
-            ),
+Widget customTextField(TextEditingController controller, String text,
+    TextInputType inputType, int height) {
+  return Container(
+    decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        border: Border.all(width: 1, color: Colors.grey)),
+    width: 325.w,
+    height: height.h,
+    child: TextField(
+      controller: controller,
+      maxLines: 2,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+        hintText: text,
+        hintStyle: const TextStyle(color: Colors.grey),
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.transparent,
           ),
         ),
-        onTap: function);
-  }
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+      ),
+    ),
+  );
+}
+
+Widget imageButton(
+    Function() function, Icon icon, String buttonName, Color color) {
+  return GestureDetector(
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Container(
+          width: 100.w,
+          height: 35.h,
+          decoration: BoxDecoration(
+              color: color, borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [icon, Text(buttonName)],
+          ),
+        ),
+      ),
+      onTap: function);
 }

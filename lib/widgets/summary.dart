@@ -80,6 +80,7 @@ class GraphSummary extends StatelessWidget {
             padding: EdgeInsets.only(left: 15.h,bottom: 15.h),
             child: 
             Container(
+              height: 75.h,
               child: 
             ListView.builder(
               shrinkWrap: true,
@@ -126,4 +127,55 @@ class GraphSummary extends StatelessWidget {
       })
       .values
       .toList();
+}
+
+class RecordSummaryCard extends StatelessWidget {
+  RecordSummaryCard(
+      {super.key,
+      required this.name,
+      required this.amount,
+      required this.color,});
+  String name;
+  Color color;
+  num amount;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Padding(
+              padding: EdgeInsets.all(30),
+              child: Container(
+                  child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.monetization_on_rounded,
+                          color: color,
+                        ),
+                        SizedBox(
+                          width: 50.w,
+                        ),
+                        Text(name)
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "THB ${amount.toStringAsFixed(2)}",
+                          style: TextStyle(color: color),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ]))),
+    );
+  }
 }
