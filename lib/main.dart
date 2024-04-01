@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +18,7 @@ import 'firebase_options.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await initializeFirebase();
+  await FirebaseAppCheck.instance.activate();
   runApp(const MyApp());
 }
 
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
                   highlightColor: Colors.transparent,
                 ),
                 debugShowCheckedModeBanner: false,
-                home: TestPage(),
+                home: Login(),
                 routes: {
                   'login': (context) => const Login(),
                   'signup': (context) => const Signup(),

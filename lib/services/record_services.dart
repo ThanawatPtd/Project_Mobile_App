@@ -144,14 +144,15 @@ class RecordService {
   }
 
   Future<void> addRecord(
-      String category, String datetime, String description, String type,String related, {num? amount}) {
+      String category, String datetime, String description, String type,String related, {num? amount, dynamic imageUrl}) {
     return record.add({
       'Category': category,
       'Amount': amount ?? 0,
       'Date': datetime,
       'Description': description,
       'Related People': related,
-      'Type': type
+      'Type': type,
+      'Image': imageUrl ?? "",
     });
   }
 

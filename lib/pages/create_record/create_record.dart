@@ -1,10 +1,14 @@
-import 'dart:ffi';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
+import 'package:camera/camera.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
@@ -24,18 +28,28 @@ class _CreateRecordState extends State<CreateRecord> {
   TextEditingController relatedController = TextEditingController();
   String? timeText;
   DateTime? date;
+
   var format = DateFormat("yyyy-MM-dd");
   String dropDownValue = "Income";
   String dropDownCategory = "Food";
 
+  XFile? _imageFile;
+  late Widget imageContainer;
+  late final Reference imageReference;
+  late String imageUrl;
+
   RecordService recordService = RecordService();
   CategoryService categoryService = CategoryService();
+  FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  String uid = FirebaseAuth.instance.currentUser!.uid;
 
   @override
   initState() {
     timeText = format.format(DateTime.now());
     recordService.setRecord();
     categoryService.setCategory();
+    imageContainer = imageContainerFuction();
+    imageReference = firebaseStorage.ref().child("${uid}/${DateTime.now().millisecondsSinceEpoch}.png");
     super.initState();
   }
 
@@ -51,7 +65,7 @@ class _CreateRecordState extends State<CreateRecord> {
             child: ListView(
           children: [
             Padding(
-              //Category
+              // categoryDropdown
               padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
               child: CustomContainer(
                   child: Padding(
@@ -219,8 +233,8 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
-            //description
             Padding(
+              //description
               padding: const EdgeInsets.all(8.0),
               child: CustomContainer(
                   child: Padding(
@@ -242,6 +256,26 @@ class _CreateRecordState extends State<CreateRecord> {
                     ),
                   ],
                 ),
+              )),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomContainer(
+                  child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 10),
+                    child: Text(
+                      "Photo",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0), child: imageContainer)
+                ],
               )),
             ),
             Padding(
@@ -270,14 +304,21 @@ class _CreateRecordState extends State<CreateRecord> {
               )),
             ),
             ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  if (_imageFile != null) {
+                    final file = File(_imageFile!.path);
+                    await imageReference.putFile(file);
+                    final url = await imageReference.getDownloadURL();
+                    imageUrl = url;
+                  }
                   recordService.addRecord(
                       dropDownCategory,
                       timeText!,
                       descriptionController.text,
                       dropDownValue,
                       relatedController.text,
-                      amount:double.parse(moneyController.text));
+                      amount: double.parse(moneyController.text),
+                      imageUrl: imageUrl);
                   moneyController.clear();
                   descriptionController.clear();
 
@@ -287,38 +328,121 @@ class _CreateRecordState extends State<CreateRecord> {
           ],
         )));
   }
-}
 
-Widget customTextField(TextEditingController controller, String text,
-    TextInputType inputType, int height) {
-  return Container(
-    decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(width: 1, color: Colors.grey)),
-    width: 325.w,
-    height: height.h,
-    child: TextField(
-      controller: controller,
-      maxLines: 2,
-      keyboardType: inputType,
-      decoration: InputDecoration(
-        hintText: text,
-        hintStyle: const TextStyle(color: Colors.grey),
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.transparent,
+  Widget onPressedCamera() {
+    pickImage(ImageSource.camera);
+    if (_imageFile != null) {
+      final file = File(_imageFile!.path);
+      return Image.file(
+        file,
+        width: double.maxFinite.w,
+        height: 200.h,
+      );
+    }
+    return Container();
+  }
+
+  Future<Widget> onPressedGallery() async {
+    await pickImage(ImageSource.gallery);
+    if (_imageFile != null) {
+      final file = File(_imageFile!.path);
+      return Image.file(
+        file,
+        width: double.maxFinite.w,
+        height: 200.h,
+      );
+    }
+    return Container();
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    if (await Permission.camera.request().isGranted) {
+      final imagePicker = ImagePicker();
+      final pickedFile = await imagePicker.pickImage(source: source);
+      setState(() {
+        _imageFile = pickedFile;
+      });
+    }
+  }
+
+  Widget customTextField(TextEditingController controller, String text,
+      TextInputType inputType, int height) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          border: Border.all(width: 1, color: Colors.grey)),
+      width: 325.w,
+      height: height.h,
+      child: TextField(
+        controller: controller,
+        maxLines: 2,
+        keyboardType: inputType,
+        decoration: InputDecoration(
+          hintText: text,
+          hintStyle: const TextStyle(color: Colors.grey),
+          border: const OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Colors.transparent,
+            ),
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          disabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.transparent),
           ),
         ),
-        enabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
-        disabledBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent),
-        ),
       ),
-    ),
-  );
+    );
+  }
+
+  Widget imageContainerFuction() {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.green[100], borderRadius: BorderRadius.circular(12)),
+      width: double.maxFinite.w,
+      height: 200.h,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          imageButton(() async {
+            Widget widget = await onPressedCamera();
+            print(widget.toString());
+            if (widget.toString() != Container().toString()) {
+              imageContainer = widget;
+            }
+          }, Icon(Icons.camera_alt), "Camera", Colors.green[200]!),
+          imageButton(() async {
+            Widget widget = await onPressedGallery();
+            print(widget.toString());
+            if (widget.toString() != Container().toString()) {
+              imageContainer = widget;
+            }
+          }, Icon(Icons.photo), "Gallery", Colors.green[300]!)
+        ],
+      ),
+    );
+  }
+
+  Widget imageButton(
+      Function() function, Icon icon, String buttonName, Color color) {
+    return GestureDetector(
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Container(
+            width: 100.w,
+            height: 35.h,
+            decoration: BoxDecoration(
+                color: color, borderRadius: BorderRadius.circular(10)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [icon, Text(buttonName)],
+            ),
+          ),
+        ),
+        onTap: function);
+  }
 }
