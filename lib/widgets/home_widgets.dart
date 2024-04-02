@@ -141,8 +141,6 @@ class ListCategory extends StatelessWidget {
                           "THB ${income}",
                           style: TextStyle(color: CustomColor.primaryColor),
                         ),
-                        Icon(Icons.chevron_right,
-                            color: CustomColor.primaryColor)
                       ],
                     )
                   ],
@@ -175,10 +173,6 @@ class ListCategory extends StatelessWidget {
                           style: TextStyle(
                               color: Color.fromARGB(255, 255, 25, 25)),
                         ),
-                        Icon(
-                          Icons.chevron_right,
-                          color: Color.fromARGB(255, 255, 25, 25),
-                        )
                       ],
                     )
                   ],
@@ -232,7 +226,6 @@ class _ShowPlanState extends State<ShowPlan> {
     return FutureBuilder(
       future: planService.getDataPlan(widget.docId),
       builder: (context, snapshot) {
-        print(snapshot.hasData);
         if (snapshot.hasData) {
           Map<String, dynamic> data =
               snapshot.data!.data() as Map<String, dynamic>;

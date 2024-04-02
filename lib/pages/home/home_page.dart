@@ -21,6 +21,9 @@ class _HomePageState extends State<HomePage> {
   PlanService planService = PlanService();
   num amount = 0;
   var format = DateFormat("yyyy-MM-dd");
+  String dropDownMonth = "${DateTime.now().month}";
+  String dropDownYear = "1";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +39,6 @@ class _HomePageState extends State<HomePage> {
           child: FutureBuilder(
               future: homeService.getUserAmount(),
               builder: (context1, snapshot1) {
-                // print(homeService.getUserAmount().);
                 recordService.setRecord();
                 planService.setPlan();
                 if (snapshot1.hasData) {
@@ -48,9 +50,9 @@ class _HomePageState extends State<HomePage> {
                           var todayRecordList =
                               recordService.checkTime(recordList, "today");
                           var thisMonthRecordList =
-                              recordService.checkTime(recordList, "this_month");
+                              recordService.checkMonth(recordList, int.parse(dropDownMonth));
                           var thisYearRecordList =
-                              recordService.checkTime(recordList, "this_year");
+                              recordService.checkYear(recordList, dropDownYear == "1" ? 2024 : dropDownYear == "2" ? 2023 : dropDownYear == "3" ? 2022 : dropDownYear == "4" ? 2021 : dropDownYear == "5" ? 2020 : 2024);
                           updateAmount(recordList);
                           return Column(
                             children: <Widget>[
@@ -147,10 +149,60 @@ class _HomePageState extends State<HomePage> {
                                     EdgeInsets.only(left: 20.h, right: 20.h),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Month",
-                                    style: TextStyle(fontSize: 18.h),
-                                    textAlign: TextAlign.left,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Month",
+                                        style: TextStyle(fontSize: 18.h),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      DropdownButton<String>(
+                                  menuMaxHeight: 100.h,// dropdown income expense
+                                  underline: Container(
+                                    height: 10.h,
+                                  ),
+                                  value: dropDownMonth,
+                                  items: const [
+                                    DropdownMenuItem(
+                                        value: '1', child: Text("January")),
+                                    DropdownMenuItem(
+                                        value: '2',
+                                        child: Text("February")),
+                                    DropdownMenuItem(
+                                        value: '3', child: Text("March")),
+                                    DropdownMenuItem(
+                                        value: '4',
+                                        child: Text("April")),
+                                    DropdownMenuItem(
+                                        value: '5', child: Text("May")),
+                                    DropdownMenuItem(
+                                        value: "6",
+                                        child: Text("June")),
+                                    DropdownMenuItem(
+                                        value: "7", child: Text("July")),
+                                    DropdownMenuItem(
+                                        value: "8",
+                                        child: Text("August")),
+                                    DropdownMenuItem(
+                                        value: "9", child: Text("September")),
+                                    DropdownMenuItem(
+                                        value: "10",
+                                        child: Text("October")),
+                                    DropdownMenuItem(
+                                        value: "11", child: Text("November")),
+                                    DropdownMenuItem(
+                                        value: "12",
+                                        child: Text("December")),
+                                    
+                                  ],
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      dropDownMonth = value!;
+                                    });
+                                  },
+                                ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -168,10 +220,41 @@ class _HomePageState extends State<HomePage> {
                                     EdgeInsets.only(left: 20.h, right: 20.h),
                                 child: Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Year",
-                                    style: TextStyle(fontSize: 18.h),
-                                    textAlign: TextAlign.left,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Year",
+                                        style: TextStyle(fontSize: 18.h),
+                                        textAlign: TextAlign.left,
+                                      ),
+                                      DropdownButton<String>(
+                                  menuMaxHeight: 100.h,// dropdown income expense
+                                  underline: Container(
+                                    height: 10.h,
+                                  ),
+                                  value: dropDownYear,
+                                  items: const [
+                                    DropdownMenuItem(
+                                        value: '1', child: Text("2024")),
+                                    DropdownMenuItem(
+                                        value: '2',
+                                        child: Text("2023")),
+                                    DropdownMenuItem(
+                                        value: '3', child: Text("2022")),
+                                    DropdownMenuItem(
+                                        value: '4',
+                                        child: Text("2021")),
+                                    DropdownMenuItem(
+                                        value: '5', child: Text("2020")),
+                                  ],
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      dropDownYear = value!;
+                                    });
+                                  },
+                                ),
+                                    ],
                                   ),
                                 ),
                               ),

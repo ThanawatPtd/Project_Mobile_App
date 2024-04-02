@@ -71,7 +71,6 @@ class PlanService {
 
       DateTime date = dateFormat.parse(data['Date']);
       if (date.isAtSameMomentAs(startDate) ||(date.isAfter(startDate) && date.isBefore(endDate.add(Duration(days: 1))))) {
-        print("record day => $date");
         newRecordList.add(record);
       }
     }
@@ -81,10 +80,7 @@ class PlanService {
   double percentPlan(
     List recordList, DateTime startDate, DateTime endDate, num target) {
     List newRecordList = checkPlanTime(recordList, startDate, endDate);
-    print("newRecordList => $newRecordList");
     num sumAmountRecord = sumTypeAmount(newRecordList, "Income");
-    print("sumAmountRecord => $sumAmountRecord");
-    print("target => $target");
     if (sumAmountRecord > target) {
       sumAmountRecord = target;
     }

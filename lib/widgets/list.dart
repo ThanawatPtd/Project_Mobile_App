@@ -341,13 +341,11 @@ class _RecordCardState extends State<RecordCard> {
     Map<String, dynamic> data = doc!.data() as Map<String, dynamic>;
 
     setState(() {
-      print("before => $amount");
       amount = data['Amount'];
       category = data['Category'];
       date = DateFormat("yyyy-MM-dd").parse(data['Date']);
       description = data['Description'];
       relatedPeople = data['Related People'];
-      print("After => $amount");
     });
   }
 }

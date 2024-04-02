@@ -202,7 +202,6 @@ class _SettingState extends State<Setting> {
   }
 
   Widget profileImage() {
-    // print(userImgae.allMatches("default"));
     if (userImgae.toString() != "default") {
       return CircleAvatar(
         radius: 45,

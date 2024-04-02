@@ -62,7 +62,6 @@ class _CreateCategoryState extends State<CreateCategory> {
                           Map<String, dynamic> dataTosetIconName = doc.data() as Map<String, dynamic>;
                           selectIcon = dataTosetIconName["IconName"];
                           selectIcon = categoryList[0]["IconName"];
-                          print(selectIcon);
                           return Expanded(
                               child: GridView.builder(
                                   gridDelegate:

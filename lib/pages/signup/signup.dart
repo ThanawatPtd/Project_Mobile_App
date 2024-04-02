@@ -86,9 +86,6 @@ class _SignupState extends State<Signup> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            print("Press SingUp");
-                            print(
-                                "${emailController.text}\n${passwordController.text}");
                             if (_formkey.currentState!.validate()) {
                               if (passwordController.text.trim() ==
                                   confirmPasswordController.text.trim()) {
@@ -96,9 +93,7 @@ class _SignupState extends State<Signup> {
                                     usernameController.text,
                                     emailController.text,
                                     passwordController.text);
-                                print(registerPass);
                                 if (registerPass) {
-                                  print("Register Success!");
                                   Navigator.pushNamed(context, 'login');
                                 }
                               }

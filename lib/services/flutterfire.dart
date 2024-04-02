@@ -10,7 +10,6 @@ Future<bool> signIn(String email, String password) async {
         .signInWithEmailAndPassword(email: email, password: password);
     return true;
   } catch (e) {
-    print(e);
     return false;
   }
 }
@@ -35,13 +34,10 @@ Future<bool> register(String username, String email, String password) async {
     return true;
   } on FirebaseAuthException catch (e) {
     if (e.code == 'weak-password') {
-      print('The password provided is too weak.');
     } else if (e.code == 'email-already-in-use') {
-      print('The account already exists for that email.');
     }
     return false;
   } catch (e) {
-    print(e.toString());
     return false;
   }
 }
@@ -59,10 +55,8 @@ Future<bool> changePassword(String currentPassword, String newPassword) async {
     await user.updatePassword(newPassword).then((_) {
       success = true;
     }).catchError((error) {
-      print(error);
     });
   }).catchError((err) {
-    print(err);
   });
 
   return success;

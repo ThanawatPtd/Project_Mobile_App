@@ -60,7 +60,6 @@ class GraphSummary extends StatelessWidget {
           Color.fromARGB(255, 225, 204, 079),
         ];
     recordService.setRecord;
-    print("total field => $recordTypeList");
     return Container(
       decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(30)),
       margin: EdgeInsets.only(top: 20.h ,left: 20.h, right: 20.h),
@@ -114,10 +113,6 @@ class GraphSummary extends StatelessWidget {
       .map<int, PieChartSectionData>((key, value) {
         double percent =
             recordService.percentType(recordList, field, record[key],kind);
-        print("percent => $percent");
-        print("key => $key");
-        print("field => $field");
-        print("record[key] => ${record[key]}");
         final value = PieChartSectionData(
           color: colorList[key],
           value: percent,

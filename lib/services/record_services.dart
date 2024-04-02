@@ -47,6 +47,38 @@ class RecordService {
     return newRecordList;
   }
 
+  List checkMonth(List recordList,int month) {
+    List newRecordList = [];
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    for (var record in recordList) {
+      DocumentSnapshot doucument = record;
+      Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
+
+      DateTime recordTime = dateFormat.parse(data['Date']);
+
+      if(recordTime.month == month && DateTime.now().year == recordTime.year){
+        newRecordList.add(record);
+      }
+      }
+    return newRecordList;
+  }
+
+List checkYear(List recordList,int year) {
+    List newRecordList = [];
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd");
+    for (var record in recordList) {
+      DocumentSnapshot doucument = record;
+      Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
+
+      DateTime recordTime = dateFormat.parse(data['Date']);
+
+      if(recordTime.year == year){
+        newRecordList.add(record);
+      }
+      }
+    return newRecordList;
+  }
+
   num sumTypeAmount(List recordList, String type) {
     num total = 0.00;
     for (var record in recordList) {
@@ -132,12 +164,8 @@ class RecordService {
         ? filtterRecordCategory(recordList, type)
         : filtterRecordType(recordList, type);
     num totalTypeAmount = sumTypeAmount(filtterRecordList, kind);
-    print("total Type Amount => $totalTypeAmount");
-    print("kind => $kind");
     num totalAmount = sumTypeAmount(recordList, kind);
-    print("total Amount => $totalAmount");
     double percent = totalTypeAmount / totalAmount;
-    print("percent => $percent");
 
     return percent * 100;
   }

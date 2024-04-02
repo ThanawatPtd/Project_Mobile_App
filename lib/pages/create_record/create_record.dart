@@ -569,14 +569,12 @@ class _CreateRecordState extends State<CreateRecord> {
         children: [
           imageButton(() async {
             Widget widget = await onPressedCamera();
-            print(widget.toString());
             if (widget.toString() != Container().toString()) {
               imageContainer = widget;
             }
           }, Icon(Icons.camera_alt), "Camera", Colors.green[200]!),
           imageButton(() async {
             Widget widget = await onPressedGallery();
-            print(widget.toString());
             if (widget.toString() != Container().toString()) {
               imageContainer = widget;
             }
