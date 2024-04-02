@@ -25,7 +25,7 @@ Future<bool> register(String username, String email, String password) async {
     FirebaseFirestore.instance
         .collection("Users")
         .doc(userId)
-        .set({"Email": email, "Username": username, "Amount": 0});
+        .set({"Email": email, "Username": username, "Amount": 0, "Image": "default"});
     CategoryService categoryService = CategoryService();
     categoryService.setCategory();
     for(int i = 0;i < 20;i++){
