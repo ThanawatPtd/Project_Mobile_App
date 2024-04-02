@@ -6,6 +6,7 @@ class UserService {
   static final uid = FirebaseAuth.instance.currentUser!.uid;
   static final DocumentReference documentReference = _firestore.collection('Users').doc(uid);
 
+
   Future<DocumentSnapshot> getUserData() async {
     final docSnapshot = await documentReference.get();
     return  docSnapshot;

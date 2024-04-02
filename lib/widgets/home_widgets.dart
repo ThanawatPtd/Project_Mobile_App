@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
+import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:project_mobile_app/pages/create_plan/create_plan.dart';
+import 'package:project_mobile_app/services/plan_service.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
 class WalletCard extends StatelessWidget {
@@ -197,6 +203,145 @@ class CustomContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(10), color: Colors.white),
       child: child,
       margin: margin,
+    );
+  }
+}
+
+class ShowPlan extends StatefulWidget {
+  ShowPlan({super.key, required this.docId, required this.recordList});
+  String docId;
+  List recordList;
+
+  @override
+  State<ShowPlan> createState() => _ShowPlanState();
+}
+
+class _ShowPlanState extends State<ShowPlan> {
+  PlanService planService = PlanService();
+  var format = DateFormat("yyyy-MM-dd");
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    planService.setPlan();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: planService.getDataPlan(widget.docId),
+      builder: (context, snapshot) {
+        print(snapshot.hasData);
+        if (snapshot.hasData) {
+          Map<String, dynamic> data =
+              snapshot.data!.data() as Map<String, dynamic>;
+          String name = data['Name'];
+          String description = data['Description'];
+          num target = data['Target'];
+          DateTime startDate = format.parse(data['StartDate']);
+          DateTime endDate = format.parse(data['EndDate']);
+          double percent = planService.percentPlan(widget.recordList, startDate, endDate, target);
+
+          return Slidable(
+              startActionPane: ActionPane(motion: BehindMotion(), children: [
+                SlidableAction(
+                    backgroundColor: CustomColor.primaryColor,
+                    icon: Icons.edit,
+                    onPressed: (context) => {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CreatePlan(
+                                        docId: widget.docId,
+                                      )))
+                        })
+              ]),
+              endActionPane: ActionPane(
+                motion: BehindMotion(),
+                children: [
+                  SlidableAction(
+                      backgroundColor: Colors.red,
+                      icon: Icons.delete,
+                      onPressed: (context) => {planService.deletePlan(widget.docId)})
+                ],
+              ),
+              child: Container(
+                constraints: BoxConstraints(
+                  maxWidth: double.infinity,
+                ),
+                margin: EdgeInsets.all(8.h),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                      )
+                    ]),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w, bottom: 15.h),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "${name}",
+                            softWrap: false,
+                            style: TextStyle(
+                                color: Colors.grey,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          Text(
+                            "${target.toStringAsFixed(2)}",
+                            softWrap: false,
+                            style: TextStyle(
+                                color: Colors.grey,
+                                overflow: TextOverflow.ellipsis),
+                          ),
+                          Text(
+                            "${startDate.day}/${startDate.month}/${startDate.year} - ${endDate.day}/${endDate.month}/${endDate.year}",
+                            softWrap: false,
+                            style: TextStyle(
+                                color: Colors.grey,
+                                overflow: TextOverflow.ellipsis),
+                          )
+                        ],
+                      ),
+                    ),
+                    CircularPercentIndicator(
+                      radius: 70.0,
+                      lineWidth: 13.0,
+                      animation: true,
+                      percent: percent,
+                      center: Text(
+                        "${(percent * 100).toStringAsFixed(2)}%",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      ),
+                      footer: Text(
+                        "${description}",
+                        softWrap: false,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17.0,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      circularStrokeCap: CircularStrokeCap.round,
+                      progressColor: Colors.red,
+                    ),
+                  ],
+                ),
+              ));
+        } else {
+          return Container();
+        }
+      },
     );
   }
 }
