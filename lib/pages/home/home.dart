@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
               child: const Icon(Icons.add,color: Colors.white,),
               backgroundColor: CustomColor.primaryColor,
             ) : null,
-      backgroundColor: Color.fromARGB(255, 243, 243, 243),
+      backgroundColor: pageIndex == 3 ?Colors.white : Color.fromARGB(255, 243, 243, 243),
       appBar: CustomAppBar(
         title: namePage[pageIndex],checkPop: false,
       ),
@@ -104,7 +104,7 @@ class _HomeState extends State<Home> {
           // ),
           child: BottomNavigationBar(
             currentIndex: pageIndex,
-            backgroundColor: Colors.transparent,
+            backgroundColor:  Colors.transparent,
             unselectedItemColor: Colors.grey[350],
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,

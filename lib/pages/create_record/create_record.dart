@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -8,20 +6,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:project_mobile_app/pages/home/home.dart';
-import 'package:project_mobile_app/pages/list/list.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/home_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/widgets/home_widgets.dart';
-import 'package:project_mobile_app/widgets/list.dart';
 
 class CreateRecord extends StatefulWidget {
-
   CreateRecord({super.key, this.docId});
-  String? docId ;
+  String? docId;
   @override
   State<CreateRecord> createState() => _CreateRecordState();
 }
@@ -41,7 +35,7 @@ class _CreateRecordState extends State<CreateRecord> {
   XFile? _imageFile;
   late Widget imageContainer;
   late final Reference imageReference;
-  late String imageUrl;
+  late String imageUrl = "";
 
   RecordService recordService = RecordService();
   CategoryService categoryService = CategoryService();
@@ -537,10 +531,18 @@ class _CreateRecordState extends State<CreateRecord> {
     await pickImage(ImageSource.gallery);
     if (_imageFile != null) {
       final file = File(_imageFile!.path);
-      return Image.file(
-        file,
-        width: double.maxFinite.w,
-        height: 200.h,
+      return Stack(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: Image.file(file,
+                width: double.maxFinite.w, height: 200.h, fit: BoxFit.cover),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 330, top: 210),
+            child: unselectImage(),
+          ),
+        ],
       );
     }
     return Container();
@@ -580,6 +582,24 @@ class _CreateRecordState extends State<CreateRecord> {
             }
           }, Icon(Icons.photo), "Gallery", Colors.green[300]!)
         ],
+      ),
+    );
+  }
+
+  Widget unselectImage() {
+    return Container(
+      width: 30.w,
+      height: 30.h,
+      decoration: BoxDecoration(
+          color: Colors.red[400], borderRadius: BorderRadius.circular(5)),
+      child: GestureDetector(
+        child: Icon(Icons.close,color: Colors.white,),
+        onTap: () {
+          setState(() {
+            imageContainer = imageContainerFuction();
+            _imageFile = null;
+          });
+        },
       ),
     );
   }
@@ -637,3 +657,4 @@ Widget imageButton(
       ),
       onTap: function);
 }
+

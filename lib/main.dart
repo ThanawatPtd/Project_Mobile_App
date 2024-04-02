@@ -8,6 +8,7 @@ import 'package:project_mobile_app/firebase_options.dart';
 import 'package:project_mobile_app/pages/create_record/create_record.dart';
 import 'package:project_mobile_app/pages/home/home.dart';
 import 'package:project_mobile_app/pages/login/login.dart';
+import 'package:project_mobile_app/pages/setting/createCategory.dart';
 import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/pages/signup/signup.dart';
 import 'package:project_mobile_app/pages/summary/summary.dart';
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
                   'summary':(context) => Summary(),
                   'setting':(context) => const Setting(),
                   'create_record':(context) => CreateRecord(),
+                  'create_category':(context) => const CreateCategory()
                 },
               )),
     );
