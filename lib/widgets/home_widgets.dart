@@ -318,10 +318,16 @@ class _ShowPlanState extends State<ShowPlan> {
                       lineWidth: 13.0,
                       animation: true,
                       percent: percent,
-                      center: Text(
-                        "${(percent * 100).toStringAsFixed(2)}%",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20.0),
+                      center: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${(percent * 100).toStringAsFixed(2)}%",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                          ),
+                          (percent*100) >= 70 ? Icon(Icons.sentiment_satisfied_alt,color: CustomColor.primaryColor,size: 30.h) : (percent*100) >= 40 ? Icon(Icons.sentiment_neutral,color: Colors.amber,size: 30.h,) : Icon(Icons.sentiment_dissatisfied_outlined,color: Colors.red,size: 30.h),
+                        ],
                       ),
                       footer: Text(
                         "${description}",
@@ -333,7 +339,7 @@ class _ShowPlanState extends State<ShowPlan> {
                         ),
                       ),
                       circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: Colors.red,
+                      progressColor: (percent*100) >= 70 ? CustomColor.primaryColor : (percent*100) >= 40 ? Colors.amber : Colors.red,
                     ),
                   ],
                 ),
