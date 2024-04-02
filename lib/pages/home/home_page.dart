@@ -49,10 +49,21 @@ class _HomePageState extends State<HomePage> {
                           var recordList = snapshot2.data?.docs ?? [];
                           var todayRecordList =
                               recordService.checkTime(recordList, "today");
-                          var thisMonthRecordList =
-                              recordService.checkMonth(recordList, int.parse(dropDownMonth));
-                          var thisYearRecordList =
-                              recordService.checkYear(recordList, dropDownYear == "1" ? 2024 : dropDownYear == "2" ? 2023 : dropDownYear == "3" ? 2022 : dropDownYear == "4" ? 2021 : dropDownYear == "5" ? 2020 : 2024);
+                          var thisMonthRecordList = recordService.checkMonth(
+                              recordList, int.parse(dropDownMonth));
+                          var thisYearRecordList = recordService.checkYear(
+                              recordList,
+                              dropDownYear == "1"
+                                  ? 2024
+                                  : dropDownYear == "2"
+                                      ? 2023
+                                      : dropDownYear == "3"
+                                          ? 2022
+                                          : dropDownYear == "4"
+                                              ? 2021
+                                              : dropDownYear == "5"
+                                                  ? 2020
+                                                  : 2024);
                           updateAmount(recordList);
                           return Column(
                             children: <Widget>[
@@ -70,56 +81,93 @@ class _HomePageState extends State<HomePage> {
                                 builder: (context3, snapshot3) {
                                   if (snapshot3.hasData) {
                                     var planList = snapshot3.data?.docs ?? [];
-
-                                    return Container(
-                                        child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 20.h,
-                                              right: 20.h,
-                                              bottom: 10.h),
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(
-                                              "Plan",
-                                              style: TextStyle(fontSize: 18.h),
-                                              textAlign: TextAlign.left,
+                                    if (planList.length > 0) {
+                                      print(planList.hashCode);
+                                      print(planList.length);
+                                      return Container(
+                                          child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                left: 20.h,
+                                                right: 20.h,
+                                                bottom: 10.h),
+                                            child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Text(
+                                                "Plan",
+                                                style:
+                                                    TextStyle(fontSize: 18.h),
+                                                textAlign: TextAlign.left,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        CarouselSlider.builder(
-                                          itemCount: planList.length,
-                                          itemBuilder:
-                                              (context, index, realIndex) {
-                                            DocumentSnapshot doucument =
-                                                planList[index];
-                                            String docId = doucument.id;
-                                            return ShowPlan(
-                                              docId: docId,
-                                              recordList: recordList,
-                                            );
-                                          },
-                                          options: CarouselOptions(
-                                            autoPlay: true,
-                                            autoPlayInterval:
-                                                Duration(seconds: 10),
-                                            autoPlayAnimationDuration:
-                                                Duration(milliseconds: 1000),
-                                            autoPlayCurve: Curves.fastOutSlowIn,
-                                            enlargeCenterPage: true,
-                                            viewportFraction: 0.9,
-                                            aspectRatio: 2.0,
-                                            height: 210.h,
-                                            initialPage: 0,
-                                            enableInfiniteScroll: false,
-                                            scrollDirection: Axis.vertical,
+                                          CarouselSlider.builder(
+                                            itemCount: planList.length,
+                                            itemBuilder:
+                                                (context, index, realIndex) {
+                                              DocumentSnapshot doucument =
+                                                  planList[index];
+                                              String docId = doucument.id;
+                                              return ShowPlan(
+                                                docId: docId,
+                                                recordList: recordList,
+                                              );
+                                            },
+                                            options: CarouselOptions(
+                                              autoPlay: true,
+                                              autoPlayInterval:
+                                                  Duration(seconds: 10),
+                                              autoPlayAnimationDuration:
+                                                  Duration(milliseconds: 1000),
+                                              autoPlayCurve:
+                                                  Curves.fastOutSlowIn,
+                                              enlargeCenterPage: true,
+                                              viewportFraction: 0.9,
+                                              aspectRatio: 2.0,
+                                              height: 210.h,
+                                              initialPage: 0,
+                                              enableInfiniteScroll: false,
+                                              scrollDirection: Axis.vertical,
+                                            ),
+                                          )
+                                        ],
+                                      ));
+                                    }else{
+                                      return Padding(
+                                        padding: const EdgeInsets.only(bottom: 10),
+                                        child: Container(
+                                          decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(20)),
+                                          width: 320.w,
+                                          height: 60.h,
+                                        child: Center(
+                                          child: Text(
+                                            "Start Your Plan Now!",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium,
                                           ),
-                                        )
-                                      ],
-                                    ));
+                                        ),
+                                                                            ),
+                                      );
+                                    }
                                   } else {
-                                    return Container();
+                                    return Padding(
+                                      padding: const EdgeInsets.only(bottom: 10),
+                                      child: Container(
+                                          decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(20)),
+                                          width: 320.w,
+                                          height: 60.h,
+                                        child: Center(
+                                          child: Text(
+                                            "Start Your Plan Now!",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headlineMedium,
+                                          ),
+                                        ),
+                                      ),
+                                    );
                                   }
                                 },
                               ),
@@ -150,7 +198,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Month",
@@ -158,50 +207,51 @@ class _HomePageState extends State<HomePage> {
                                         textAlign: TextAlign.left,
                                       ),
                                       DropdownButton<String>(
-                                  menuMaxHeight: 100.h,// dropdown income expense
-                                  underline: Container(
-                                    height: 10.h,
-                                  ),
-                                  value: dropDownMonth,
-                                  items: const [
-                                    DropdownMenuItem(
-                                        value: '1', child: Text("January")),
-                                    DropdownMenuItem(
-                                        value: '2',
-                                        child: Text("February")),
-                                    DropdownMenuItem(
-                                        value: '3', child: Text("March")),
-                                    DropdownMenuItem(
-                                        value: '4',
-                                        child: Text("April")),
-                                    DropdownMenuItem(
-                                        value: '5', child: Text("May")),
-                                    DropdownMenuItem(
-                                        value: "6",
-                                        child: Text("June")),
-                                    DropdownMenuItem(
-                                        value: "7", child: Text("July")),
-                                    DropdownMenuItem(
-                                        value: "8",
-                                        child: Text("August")),
-                                    DropdownMenuItem(
-                                        value: "9", child: Text("September")),
-                                    DropdownMenuItem(
-                                        value: "10",
-                                        child: Text("October")),
-                                    DropdownMenuItem(
-                                        value: "11", child: Text("November")),
-                                    DropdownMenuItem(
-                                        value: "12",
-                                        child: Text("December")),
-                                    
-                                  ],
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      dropDownMonth = value!;
-                                    });
-                                  },
-                                ),
+                                        menuMaxHeight:
+                                            100.h, // dropdown income expense
+                                        underline: Container(
+                                          height: 10.h,
+                                        ),
+                                        value: dropDownMonth,
+                                        items: const [
+                                          DropdownMenuItem(
+                                              value: '1',
+                                              child: Text("January")),
+                                          DropdownMenuItem(
+                                              value: '2',
+                                              child: Text("February")),
+                                          DropdownMenuItem(
+                                              value: '3', child: Text("March")),
+                                          DropdownMenuItem(
+                                              value: '4', child: Text("April")),
+                                          DropdownMenuItem(
+                                              value: '5', child: Text("May")),
+                                          DropdownMenuItem(
+                                              value: "6", child: Text("June")),
+                                          DropdownMenuItem(
+                                              value: "7", child: Text("July")),
+                                          DropdownMenuItem(
+                                              value: "8",
+                                              child: Text("August")),
+                                          DropdownMenuItem(
+                                              value: "9",
+                                              child: Text("September")),
+                                          DropdownMenuItem(
+                                              value: "10",
+                                              child: Text("October")),
+                                          DropdownMenuItem(
+                                              value: "11",
+                                              child: Text("November")),
+                                          DropdownMenuItem(
+                                              value: "12",
+                                              child: Text("December")),
+                                        ],
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            dropDownMonth = value!;
+                                          });
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -221,7 +271,8 @@ class _HomePageState extends State<HomePage> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         "Year",
@@ -229,31 +280,30 @@ class _HomePageState extends State<HomePage> {
                                         textAlign: TextAlign.left,
                                       ),
                                       DropdownButton<String>(
-                                  menuMaxHeight: 100.h,// dropdown income expense
-                                  underline: Container(
-                                    height: 10.h,
-                                  ),
-                                  value: dropDownYear,
-                                  items: const [
-                                    DropdownMenuItem(
-                                        value: '1', child: Text("2024")),
-                                    DropdownMenuItem(
-                                        value: '2',
-                                        child: Text("2023")),
-                                    DropdownMenuItem(
-                                        value: '3', child: Text("2022")),
-                                    DropdownMenuItem(
-                                        value: '4',
-                                        child: Text("2021")),
-                                    DropdownMenuItem(
-                                        value: '5', child: Text("2020")),
-                                  ],
-                                  onChanged: (String? value) {
-                                    setState(() {
-                                      dropDownYear = value!;
-                                    });
-                                  },
-                                ),
+                                        menuMaxHeight:
+                                            100.h, // dropdown income expense
+                                        underline: Container(
+                                          height: 10.h,
+                                        ),
+                                        value: dropDownYear,
+                                        items: const [
+                                          DropdownMenuItem(
+                                              value: '1', child: Text("2024")),
+                                          DropdownMenuItem(
+                                              value: '2', child: Text("2023")),
+                                          DropdownMenuItem(
+                                              value: '3', child: Text("2022")),
+                                          DropdownMenuItem(
+                                              value: '4', child: Text("2021")),
+                                          DropdownMenuItem(
+                                              value: '5', child: Text("2020")),
+                                        ],
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            dropDownYear = value!;
+                                          });
+                                        },
+                                      ),
                                     ],
                                   ),
                                 ),

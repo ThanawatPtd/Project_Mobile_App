@@ -66,7 +66,7 @@ class _CreatePlanState extends State<CreatePlan> {
                     Padding(
                       padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
                       child: customTextField(
-                          nameController, "Name", TextInputType.name, 50),
+                          nameController, "Name", TextInputType.name, 55),
                     ),
                   ],
                 ),

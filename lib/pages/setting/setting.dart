@@ -129,7 +129,7 @@ class _SettingState extends State<Setting> {
                                       "Logout", CustomColor.primaryColor),
                                   onTap: () {
                                     FirebaseAuth.instance.signOut();
-                                    Navigator.pop(context);
+                                    Navigator.pushNamed(context, "login");
                                   },
                                 ),
                                 Container(

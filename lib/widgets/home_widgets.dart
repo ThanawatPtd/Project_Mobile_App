@@ -41,9 +41,9 @@ class WalletCard extends StatelessWidget {
                   style: TextStyle(fontSize: 12.h, color: Colors.grey[300]),
                 ),
                 Text(
-              "MY ACCOUNT",
-              style: TextStyle(color: Colors.white),
-            ),
+                  "MY ACCOUNT",
+                  style: TextStyle(color: Colors.white),
+                ),
               ],
             ),
           ),
@@ -69,14 +69,14 @@ class WalletCard extends StatelessWidget {
                           style: TextStyle(color: Colors.grey[300]),
                         ),
                         Text(
-                      "${money.toStringAsFixed(2)}",
-                      softWrap: false,
-                      style: TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          color: Colors.white,
-                          fontSize: 15.h,
-                          fontWeight: FontWeight.bold),
-                    ),
+                          "${money.toStringAsFixed(2)}",
+                          softWrap: false,
+                          style: TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.white,
+                              fontSize: 15.h,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),
@@ -225,7 +225,8 @@ class _ShowPlanState extends State<ShowPlan> {
           num target = data['Target'];
           DateTime startDate = format.parse(data['StartDate']);
           DateTime endDate = format.parse(data['EndDate']);
-          double percent = planService.percentPlan(widget.recordList, startDate, endDate, target);
+          double percent = planService.percentPlan(
+              widget.recordList, startDate, endDate, target);
 
           return Slidable(
               startActionPane: ActionPane(motion: BehindMotion(), children: [
@@ -247,85 +248,85 @@ class _ShowPlanState extends State<ShowPlan> {
                   SlidableAction(
                       backgroundColor: Colors.red,
                       icon: Icons.delete,
-                      onPressed: (context) => {planService.deletePlan(widget.docId)})
+                      onPressed: (context) =>
+                          {planService.deletePlan(widget.docId)})
                 ],
               ),
-              child: Container(
-                constraints: BoxConstraints(
-                  maxWidth: double.infinity,
-                ),
-                margin: EdgeInsets.all(8.h),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                      )
-                    ]),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsets.only(top: 10.h, left: 15.w, right: 15.w, bottom: 15.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${name}",
-                            softWrap: false,
-                            style: TextStyle(
-                                color: Colors.grey,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          Text(
-                            "${target.toStringAsFixed(2)}",
-                            softWrap: false,
-                            style: TextStyle(
-                                color: Colors.grey,
-                                overflow: TextOverflow.ellipsis),
-                          ),
-                          Text(
-                            "${startDate.day}/${startDate.month}/${startDate.year} - ${endDate.day}/${endDate.month}/${endDate.year}",
-                            softWrap: false,
-                            style: TextStyle(
-                                color: Colors.grey,
-                                overflow: TextOverflow.ellipsis),
-                          )
-                        ],
-                      ),
-                    ),
-                    CircularPercentIndicator(
-                      radius: 70.0,
-                      lineWidth: 13.0,
-                      animation: true,
-                      percent: percent,
-                      center: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${(percent * 100).toStringAsFixed(2)}%",
-                            style: TextStyle(fontSize: 20.0),
-                          ),
-                          (percent*100) >= 70 ? Icon(Icons.sentiment_satisfied_alt,color: CustomColor.primaryColor,size: 30.h) : (percent*100) >= 40 ? Icon(Icons.sentiment_neutral,color: Colors.amber,size: 30.h,) : Icon(Icons.sentiment_dissatisfied_outlined,color: Colors.red,size: 30.h),
-                        ],
-                      ),
-                      footer: Text(
-                        "${description}",
-                        maxLines: 1,
-                        softWrap: false,
-                        style: TextStyle(
-                          color: Colors.grey,
-                          fontSize: 17.0,
-                          overflow: TextOverflow.ellipsis,
+              child: Center(
+                child: Container(
+                  width: 300.w,
+                  constraints: BoxConstraints(
+                    maxWidth: double.infinity,
+                  ),
+                  margin: EdgeInsets.all(8.h),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                        )
+                      ]),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 10.h, left: 15.w, right: 15.w, bottom: 15.h),
+                        child: Text(
+                          "${name} ${target.toStringAsFixed(2)} ${startDate.day}/${startDate.month}/${startDate.year} - ${endDate.day}/${endDate.month}/${endDate.year}",
+                          maxLines: 1,
+                          softWrap: false,
+                          style: TextStyle(
+                              color: Colors.grey,
+                              overflow: TextOverflow.ellipsis),
                         ),
                       ),
-                      circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: (percent*100) >= 70 ? CustomColor.primaryColor : (percent*100) >= 40 ? Colors.amber : Colors.red,
-                    ),
-                  ],
+                      CircularPercentIndicator(
+                        radius: 70.0,
+                        lineWidth: 13.0,
+                        animation: true,
+                        percent: percent,
+                        center: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${(percent * 100).toStringAsFixed(2)}%",
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                            (percent * 100) >= 70
+                                ? Icon(Icons.sentiment_satisfied_alt,
+                                    color: CustomColor.primaryColor, size: 30.h)
+                                : (percent * 100) >= 40
+                                    ? Icon(
+                                        Icons.sentiment_neutral,
+                                        color: Colors.amber,
+                                        size: 30.h,
+                                      )
+                                    : Icon(Icons.sentiment_dissatisfied_outlined,
+                                        color: Colors.red, size: 30.h),
+                          ],
+                        ),
+                        footer: Text(
+                          "${description}",
+                          maxLines: 1,
+                          softWrap: false,
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 17.0,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        circularStrokeCap: CircularStrokeCap.round,
+                        progressColor: (percent * 100) >= 70
+                            ? CustomColor.primaryColor
+                            : (percent * 100) >= 40
+                                ? Colors.amber
+                                : Colors.red,
+                      ),
+                    ],
+                  ),
                 ),
               ));
         } else {

@@ -63,10 +63,10 @@ class _LoginState extends State<Login> {
                         GestureDetector(
                           onTap: () async {
                             bool signInPass = await signIn(
-                                // emailController.text.trim(),
-                                // passwordController.text.trim());
-                                "Thanawatptd@hotmail.com",
-                                "123456");
+                                emailController.text.trim(),
+                                passwordController.text.trim());
+                                // "Thanawatptd@hotmail.com",
+                                // "123456");
                             if (signInPass) {
                               Navigator.pushNamed(context, 'home'); //go to page
                             }
