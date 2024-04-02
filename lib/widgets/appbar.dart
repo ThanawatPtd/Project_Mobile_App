@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:project_mobile_app/widgets/colors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSize {
-  const CustomAppBar({super.key});
-
+  CustomAppBar({super.key, required this.title, required this.checkPop});
+  bool checkPop;
+  String title;
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      actions: [Icon(Icons.notifications)],
-      backgroundColor: CustomColor.primaryColor,
-      foregroundColor: Colors.white,
-      title: Text("Summary"),
-    );
+    return
+        AppBar(
+          backgroundColor: const Color.fromARGB(255, 77, 145, 90),
+          foregroundColor: Colors.white,
+          automaticallyImplyLeading: checkPop,
+          centerTitle: true,
+          title: Text(title),
+          
+        );
   }
 
   @override
@@ -20,8 +24,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => const Size(
+  Size get preferredSize => Size(
         double.maxFinite,
-        50,
+        50.h,
       );
 }
