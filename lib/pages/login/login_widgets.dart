@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_mobile_app/Widgets/colors.dart';
 
 Widget reuseableText(String text) {
   return Container(
@@ -71,16 +72,20 @@ Widget buildTextField(
 }
 
 Widget signUpButton() {
-  return Container(
-    margin: EdgeInsets.only(top: 5.h, bottom: 10.h),
+  return GestureDetector(
+    
     child: Container(
-      child: Text(
-        "Sign up",
-        style: TextStyle(
-          decoration: TextDecoration.underline,
-          color: Colors.black,
-          fontWeight: FontWeight.normal,
-          fontSize: 14.sp,
+      margin: EdgeInsets.only(top: 5.h, bottom: 10.h),
+      child: Container(
+        child: Text(
+          "Sign up",
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+            decorationColor: CustomColor.primaryColor,
+            color: CustomColor.primaryColor,
+            fontWeight: FontWeight.normal,
+            fontSize: 14.sp,
+          ),
         ),
       ),
     ),

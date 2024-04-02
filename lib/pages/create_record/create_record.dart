@@ -320,9 +320,9 @@ class _CreateRecordState extends State<CreateRecord> {
                       await recordService.addRecord(
                           dropDownCategory,
                           timeText!,
-                          descriptionController.text,
                           dropDownValue,
-                          relatedController.text,
+                          related:  relatedController.text,
+                          description:  descriptionController.text,
                           amount: double.parse(moneyController.text),
                           imageUrl: imageUrl);
                       moneyController.clear();

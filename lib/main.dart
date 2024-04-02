@@ -13,12 +13,14 @@ import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/pages/signup/signup.dart';
 import 'package:project_mobile_app/pages/summary/summary.dart';
 import 'package:project_mobile_app/pages/welcome/bloc/welcomeBloc.dart';
+import 'package:project_mobile_app/testTextTheme.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
-void main() async{
+
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await AwesomeNotifications().initialize(
-    // 
+    //
     null,
     [
       NotificationChannel(
@@ -30,8 +32,9 @@ void main() async{
       ),
     ],
   );
-  bool isAllowedToSendNotification = await AwesomeNotifications().isNotificationAllowed();
-  if (!isAllowedToSendNotification){
+  bool isAllowedToSendNotification =
+      await AwesomeNotifications().isNotificationAllowed();
+  if (!isAllowedToSendNotification) {
     AwesomeNotifications().requestPermissionToSendNotifications();
   }
 
@@ -55,7 +58,7 @@ void main() async{
       payload: {'action': 'openApp'},
     ),
   );
-  
+
   await initializeFirebase();
   await FirebaseAppCheck.instance.activate();
   runApp(const MyApp());
@@ -79,7 +82,18 @@ class MyApp extends StatelessWidget {
       child: ScreenUtilInit(
           builder: (context, child) => MaterialApp(
                 theme: ThemeData(
-                  textTheme: TextTheme(),
+                  fontFamily: "Inter",
+                  textTheme: const TextTheme(
+                    headlineLarge: TextStyle(fontSize: 24),
+                    headlineMedium: TextStyle(fontSize: 20),
+                    headlineSmall: TextStyle(fontSize: 18),
+                    bodyLarge: TextStyle(fontSize: 18),
+                    bodyMedium: TextStyle(fontSize: 16),
+                    bodySmall: TextStyle(fontSize:14),
+                    labelLarge: TextStyle(fontSize:16),
+                    labelMedium: TextStyle(fontSize: 14),
+                    labelSmall: TextStyle(fontSize: 12),
+                  ),
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                 ),
@@ -88,11 +102,11 @@ class MyApp extends StatelessWidget {
                 routes: {
                   'login': (context) => const Login(),
                   'signup': (context) => const Signup(),
-                  'home':(context) => Home(),
-                  'summary':(context) => Summary(),
-                  'setting':(context) => const Setting(),
-                  'create_record':(context) => CreateRecord(),
-                  'create_category':(context) => const CreateCategory()
+                  'home': (context) => Home(),
+                  'summary': (context) => Summary(),
+                  'setting': (context) => const Setting(),
+                  'create_record': (context) => CreateRecord(),
+                  'create_category': (context) => const CreateCategory()
                 },
               )),
     );

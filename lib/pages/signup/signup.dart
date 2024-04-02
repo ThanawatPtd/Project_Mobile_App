@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:project_mobile_app/Widgets/colors.dart';
 import 'package:project_mobile_app/pages/signup/signup_widget.dart';
 import 'package:project_mobile_app/services/flutterfire.dart';
 
@@ -39,12 +40,10 @@ class _SignupState extends State<Signup> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 50,
+                        SizedBox(
+                          height: 20.h,
                         ),
-                        const SizedBox(
-                          height: 150,
-                        ),
+                        Image.asset("assets/images/logo_nobackground.png",width: 100.w,height: 100.h,),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 25),
                           child: Text(
@@ -104,7 +103,7 @@ class _SignupState extends State<Signup> {
                               }
                             }
                           },
-                          child: button("Sign up", Colors.green[300]!),
+                          child: button("Sign up", CustomColor.primaryColor),
                         ),
                       ]),
                 ),

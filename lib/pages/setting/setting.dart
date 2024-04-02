@@ -122,7 +122,7 @@ class _SettingState extends State<Setting> {
                                       });
                                 }),
                                 SizedBox(
-                                  height: 250.h,
+                                  height: 200.h,
                                 ),
                                 GestureDetector(
                                   child: logoutButton(
