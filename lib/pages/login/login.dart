@@ -29,12 +29,11 @@ class _LoginState extends State<Login> {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        const SizedBox(
-                          height: 50,
+                        SizedBox(
+                          height: 50.h,
                         ),
-                        const SizedBox(
-                          height: 150,
-                        ),
+                        Image.asset("assets/images/logo_nobackground.png", width: 100.w,height: 100.h,),
+                        SizedBox(height: 20.h,),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 25),
                           child: Text(
@@ -42,14 +41,15 @@ class _LoginState extends State<Login> {
                             style: TextStyle(fontSize: 22.sp),
                           ),
                         ),
+                        SizedBox(height: 30.h,),
                         // reuseableText("Email"),
                         buildTextField(
                             "Email",
                             const FaIcon(FontAwesomeIcons.solidUser),
                             "Email",
                             emailController),
-                        const SizedBox(
-                          height: 20,
+                        SizedBox(
+                          height: 25.h,
                         ),
                         // reuseableText("Password"),
                         buildTextField(
@@ -58,7 +58,7 @@ class _LoginState extends State<Login> {
                             "Password",
                             passwordController),
                         SizedBox(
-                          height: 30.h,
+                          height: 25.h,
                         ),
                         GestureDetector(
                           onTap: () async {

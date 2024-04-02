@@ -229,15 +229,15 @@ List checkYear(List recordList,int year) {
     return null;
   }
 
-  Future<void> addRecord(String category, String datetime, String description,
-      String type, String related,
-      {num? amount, dynamic imageUrl}) {
+  Future<void> addRecord(String category, String datetime,
+      String type,
+      {num? amount, String? description,String? related, dynamic imageUrl}) {
     return record.add({
       'Category': category,
       'Amount': amount ?? 0,
       'Date': datetime,
-      'Description': description,
-      'Related People': related,
+      'Description': description ?? "",
+      'Related People': related ?? "",
       'Type': type,
       'Image': imageUrl ?? "",
     });

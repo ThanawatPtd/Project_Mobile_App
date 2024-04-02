@@ -41,7 +41,7 @@ class _CreateCategoryState extends State<CreateCategory> {
               padding: const EdgeInsets.all(8.0),
               child: CustomContainer(
                   child: SizedBox(
-                height: 400.h,
+                height: 620.h,
                 child: Column(
                   children: [
                     Row(
@@ -59,31 +59,80 @@ class _CreateCategoryState extends State<CreateCategory> {
                         if (snapshot.hasData) {
                           categoryList = snapshot.data!.docs ?? [];
                           DocumentSnapshot doc = categoryList[0];
-                          Map<String, dynamic> dataTosetIconName = doc.data() as Map<String, dynamic>;
+                          Map<String, dynamic> dataTosetIconName =
+                              doc.data() as Map<String, dynamic>;
                           selectIcon = dataTosetIconName["IconName"];
                           selectIcon = categoryList[0]["IconName"];
                           return Expanded(
-                              child: GridView.builder(
-                                  gridDelegate:
-                                      SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
+                              child: Column(
+                            children: [
+                              SizedBox(
+                                height: 400.h,
+                                child: GridView.builder(
+                                    gridDelegate:
+                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    ),
+                                    itemCount: categoryList.length,
+                                    itemBuilder: (context, index) {
+                                      DocumentSnapshot documentSnapshot =
+                                          categoryList[index];
+                                      Map<String, dynamic> data =
+                                          documentSnapshot.data()
+                                              as Map<String, dynamic>;
+                                      String categoryName =
+                                          data["CategoryName"];
+                                      String categoryIcon = data["IconName"];
+                                      return buildCard(
+                                          index, categoryName, categoryIcon);
+                                    }),
+                              ),
+                              SizedBox(
+                                height: 15.h,
+                              ),
+                              CustomContainer(
+                                  child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text("Category Name"),
+                                      ],
+                                    ),
                                   ),
-                                  itemCount: categoryList.length,
-                                  itemBuilder: (context, index) {
-                                    DocumentSnapshot documentSnapshot =
-                                        categoryList[index];
-                                    Map<String, dynamic> data = documentSnapshot
-                                        .data() as Map<String, dynamic>;
-                                    String categoryName = data["CategoryName"];
-                                    String categoryIcon = data["IconName"];
-                                    return GestureDetector(
-                                      child: buildCard(
-                                          index, categoryName, categoryIcon),
-                                      onTap: () {
-                                        selectIcon = categoryIcon;
-                                      },
-                                    );
-                                  }));
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: customTextField(
+                                        categoryNameController,
+                                        "Category Name",
+                                        TextInputType.name,
+                                        50),
+                                  ),
+                                ],
+                              )),
+                              GestureDetector(
+                                child: createCategoryButton(
+                                    "Create", CustomColor.primaryColor),
+                                onTap: () {
+                                  print(selectIcon);
+                                  selectIcon =
+                                      categoryList[checkedIndex]["IconName"];
+                                  print(selectIcon);
+                                  categoryService.addCategory(
+                                      categoryNameController.text, selectIcon);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Home(
+                                                page: 3,
+                                              )));
+                                },
+                              )
+                            ],
+                          ));
                         } else {
                           return CircularProgressIndicator();
                         }
@@ -93,41 +142,6 @@ class _CreateCategoryState extends State<CreateCategory> {
                 ),
               )),
             ),
-            SizedBox(
-              height: 15.h,
-            ),
-            CustomContainer(
-                child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text("Category Name"),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: customTextField(categoryNameController,
-                      "Category Name", TextInputType.name, 50),
-                ),
-              ],
-            )),
-            GestureDetector(
-              child: createCategoryButton("Create", CustomColor.primaryColor),
-              onTap: () {
-                categoryService.addCategory(
-                    categoryNameController.text, selectIcon);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Home(
-                              page: 3,
-                            )));
-              },
-            )
           ],
         ),
       ),
@@ -167,6 +181,7 @@ class _CreateCategoryState extends State<CreateCategory> {
       onTap: () {
         setState(() {
           checkedIndex = index;
+          print(checkedIndex);
         });
       },
       child: Stack(

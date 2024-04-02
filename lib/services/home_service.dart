@@ -4,6 +4,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 class HomeService{
     late String userId = FirebaseAuth.instance.currentUser!.uid;
 
+  Future<DocumentSnapshot<Map<String, dynamic>>> getUserData() async{
+    final docRef = FirebaseFirestore.instance.collection("Users").doc(userId);
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot = await docRef.get();
+    return documentSnapshot;
+  }
+
   Future<num> getUserAmount() async {
     final docRef = FirebaseFirestore.instance.collection('Users').doc(userId);
 
@@ -35,7 +41,25 @@ class HomeService{
       // Access specific fields
       String email = data['Email'];
       String username = data['Username'];
-    return await docRef.update({'Amount': amount, 'Email': email, 'Username': username});
+      String imageUrl = data['Image'];
+    return await docRef.update({'Amount': amount, 'Email': email, 'Username': username, 'Image': imageUrl});
+    }
+    return null;
+  }
+
+  Future<void> updateImage(String imageUrl) async{
+    final docRef = FirebaseFirestore.instance.collection("Users").doc(userId);
+    DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
+        await docRef.get();
+    if (documentSnapshot.exists) {
+      // Get the data as a Map
+      Map<String, dynamic> data =
+          documentSnapshot.data() as Map<String, dynamic>;
+      // Access specific fields
+      String email = data['Email'];
+      String username = data['Username'];
+      num amount = data['Amount'];
+    return await docRef.update({'Amount': amount, 'Email': email, 'Username': username, 'Image': imageUrl});
     }
     return null;
   }
