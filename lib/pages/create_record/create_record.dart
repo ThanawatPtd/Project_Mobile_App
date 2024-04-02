@@ -270,8 +270,7 @@ class _CreateRecordState extends State<CreateRecord> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                     child: Text(
                       "Photo",
                       style: TextStyle(color: Colors.grey),
@@ -284,7 +283,7 @@ class _CreateRecordState extends State<CreateRecord> {
             ),
             Padding(
               // Related TextField
-              padding: const EdgeInsets.only(left:8.0, right: 8, top:8),
+              padding: const EdgeInsets.only(left: 8.0, right: 8, top: 8),
               child: CustomContainer(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -299,7 +298,7 @@ class _CreateRecordState extends State<CreateRecord> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only( left: 2.0),
+                      padding: const EdgeInsets.only(left: 2.0),
                       child: customTextField(
                           relatedController, "", TextInputType.multiline, 70),
                     ),
@@ -318,11 +317,9 @@ class _CreateRecordState extends State<CreateRecord> {
                   if (docId == null) {
                     try {
                       await recordService.addRecord(
-                          dropDownCategory,
-                          timeText!,
-                          dropDownValue,
-                          related:  relatedController.text,
-                          description:  descriptionController.text,
+                          dropDownCategory, timeText!, dropDownValue,
+                          related: relatedController.text,
+                          description: descriptionController.text,
                           amount: double.parse(moneyController.text),
                           imageUrl: imageUrl);
                       moneyController.clear();
@@ -401,6 +398,12 @@ class _CreateRecordState extends State<CreateRecord> {
                     }
                   } else {
                     try {
+                      if (_imageFile != null) {
+                    final file = File(_imageFile!.path);
+                    await imageReference.putFile(file);
+                    final url = await imageReference.getDownloadURL();
+                    imageUrl = url;
+                  }
                       await recordService.updateRecord(
                           docId!,
                           dropDownCategory,
@@ -408,7 +411,8 @@ class _CreateRecordState extends State<CreateRecord> {
                           descriptionController.text,
                           dropDownValue,
                           relatedController.text,
-                          amount: double.parse(moneyController.text));
+                          amount: double.parse(moneyController.text),
+                          imageUrl: imageUrl);
 
                       moneyController.clear();
                       descriptionController.clear();
@@ -489,14 +493,15 @@ class _CreateRecordState extends State<CreateRecord> {
 
                   void fetchData() {}
                 },
-                child: createRecordButton(docId == null ? "Create" : "Edit", CustomColor.primaryColor)),
+                child: createRecordButton(docId == null ? "Create" : "Edit",
+                    CustomColor.primaryColor)),
           ],
         )));
   }
 
   Widget createRecordButton(String text, Color color) {
     return Padding(
-      padding: const EdgeInsets.only(left :10.0,right: 10.0, bottom: 10),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10),
       child: Container(
         margin: EdgeInsets.only(top: 20.h),
         width: 325.w,
@@ -541,9 +546,27 @@ class _CreateRecordState extends State<CreateRecord> {
       dropDownValue = list[5].toString();
       imageUrl = list[6].toString();
 
+      setState(() {
+        if (imageUrl != "") {
+          imageContainer = setImage();
+        }
+      });
     } else {
       // Handle no data case (e.g., show error message)
     }
+  }
+
+  Widget setImage() {
+    return Stack(children: [
+      ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Image.network(imageUrl,
+              width: double.maxFinite.w, height: 200.h, fit: BoxFit.cover)),
+      Padding(
+        padding: const EdgeInsets.only(left: 330, top: 210),
+        child: unselectImage(),
+      ),
+    ]);
   }
 
   Widget onPressedCamera() {
@@ -623,7 +646,10 @@ class _CreateRecordState extends State<CreateRecord> {
       decoration: BoxDecoration(
           color: Colors.red[400], borderRadius: BorderRadius.circular(5)),
       child: GestureDetector(
-        child: const Icon(Icons.close,color: Colors.white,),
+        child: const Icon(
+          Icons.close,
+          color: Colors.white,
+        ),
         onTap: () {
           setState(() {
             imageContainer = imageContainerFuction();
@@ -687,4 +713,3 @@ Widget imageButton(
         ),
       ));
 }
-

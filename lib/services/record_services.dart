@@ -245,14 +245,15 @@ List checkYear(List recordList,int year) {
 
   Future<void> updateRecord(String docId, String category, String datetime,
       String description, String type, String related,
-      {num? amount}) {
+      {num? amount,String? imageUrl}) {
     return record.doc(docId).update({
       'Category': category,
       'Amount': amount ?? 0,
       'Date': datetime,
       'Description': description,
       'Related People': related,
-      'Type': type
+      'Type': type,
+      'Image': imageUrl ?? ""
     });
   }
   Future<void> deleteRecord(String docId) {
