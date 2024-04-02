@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
@@ -134,48 +136,64 @@ class RecordSummaryCard extends StatelessWidget {
       {super.key,
       required this.name,
       required this.amount,
-      required this.color,});
+      required this.color,this.check});
   String name;
   Color color;
   num amount;
-  
+  bool? check;
   @override
   Widget build(BuildContext context) {
-    return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Padding(
-              padding: EdgeInsets.all(30),
-              child: Container(
-                  child: Column(children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+    CategoryService categoryService = CategoryService();
+    categoryService.setCategory();
+    return StreamBuilder<QuerySnapshot>(
+      stream: categoryService.getCategories(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+        var categoryList = snapshot.data?.docs ?? [];
+
+        String image = categoryService.getIconNameWithCategoryName(categoryList, name);
+        return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Padding(
+                  padding: EdgeInsets.all(30),
+                  child: Container(
+                      child: Column(children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(
-                          Icons.monetization_on_rounded,
-                          color: color,
+                        Row(
+                          children: [
+                            check == null ?SvgPicture.asset(
+                                "assets/icons/${image}.svg",
+                                height: 16.h,
+                                width: 16.h,
+                              ): Icon(Icons.monetization_on, color: color,),
+                            SizedBox(
+                              width: 50.w,
+                            ),
+                            Text(name)
+                          ],
                         ),
-                        SizedBox(
-                          width: 50.w,
-                        ),
-                        Text(name)
+                        Row(
+                          children: [
+                            Text(
+                              "THB ${amount.toStringAsFixed(2)}",
+                              style: TextStyle(color: color),
+                            ),
+                          ],
+                        )
                       ],
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "THB ${amount.toStringAsFixed(2)}",
-                          style: TextStyle(color: color),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ]))),
+                  ]))),
+        );
+        }
+        else {
+          return Container();
+        }
+      }
     );
   }
 }

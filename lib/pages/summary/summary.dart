@@ -99,7 +99,7 @@ class Summary extends StatelessWidget {
                           
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 5.h),
-                                child: RecordSummaryCard(name: totalList[index],amount: TotalAmount, color: totalList[index] == "Income" ? CustomColor.primaryColor : Color.fromARGB(255, 255, 25, 25)),
+                                child: RecordSummaryCard(name: totalList[index],amount: TotalAmount, color: totalList[index] == "Income" ? CustomColor.primaryColor : Color.fromARGB(255, 255, 25, 25),check: true),
                               );
                             },),
                         )

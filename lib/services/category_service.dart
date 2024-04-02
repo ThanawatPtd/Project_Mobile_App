@@ -19,4 +19,21 @@ class CategoryService{
       "IconName": iconName
     });
   }
+
+  String getIconNameWithCategoryName(List catagoryList,String categoryRecord){
+    String sendIconName = "";
+    for (var doc in catagoryList){
+      DocumentSnapshot doucument = doc;
+      Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
+
+      String category = data['CategoryName'];
+      String iconName = data['IconName'];
+      print("${category} = ${categoryRecord}");
+      if(category == categoryRecord){
+        sendIconName = iconName;
+        print("11");
+      }
+    }
+    return sendIconName;
+  }
 }

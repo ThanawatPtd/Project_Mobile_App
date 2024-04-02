@@ -194,7 +194,7 @@ class _CreatePlanState extends State<CreatePlan> {
                   if (docId == null) {
                     try {
                       await planService.addPlan(
-                          nameController.text,double.parse(targetController.text),descriptionController.text,timeText!);
+                      nameController.text,double.parse(targetController.text),descriptionController.text,timeText!);
                       targetController.clear();
                       descriptionController.clear();
                       nameController.clear();
@@ -273,7 +273,7 @@ class _CreatePlanState extends State<CreatePlan> {
                   } else {
                     try {
                       await planService.updatePlan(docId!,
-                          nameController.text,double.parse(targetController.text),descriptionController.text,timeText!);
+                      nameController.text,double.parse(targetController.text),descriptionController.text,timeText!);
                       targetController.clear();
                       descriptionController.clear();
                       nameController.clear();
