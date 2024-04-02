@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:project_mobile_app/models/appicon.dart';
 import 'package:project_mobile_app/pages/home/home.dart';
-import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/widgets/appbar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
@@ -32,7 +31,7 @@ class _CreateCategoryState extends State<CreateCategory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 243, 243, 243),
+      backgroundColor: const Color.fromARGB(255, 243, 243, 243),
       appBar: CustomAppBar(title: "Create Category", checkPop: true),
       body: SingleChildScrollView(
         child: Column(
@@ -49,7 +48,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("Select Icon"),
+                          child: Text("Select Icon", style: Theme.of(context).textTheme.headlineMedium,),
                         ),
                       ],
                     ),
@@ -57,7 +56,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                       stream: categoryService.getCategories(),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          categoryList = snapshot.data!.docs ?? [];
+                          categoryList = snapshot.data!.docs;
                           DocumentSnapshot doc = categoryList[0];
                           Map<String, dynamic> dataTosetIconName =
                               doc.data() as Map<String, dynamic>;
@@ -70,10 +69,11 @@ class _CreateCategoryState extends State<CreateCategory> {
                                 height: 400.h,
                                 child: GridView.builder(
                                     gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 3,
                                     ),
-                                    itemCount: categoryList.length,
+                                    itemCount: 
+                                    iconNameList.length,
                                     itemBuilder: (context, index) {
                                       DocumentSnapshot documentSnapshot =
                                           categoryList[index];
@@ -82,7 +82,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                                               as Map<String, dynamic>;
                                       String categoryName =
                                           data["CategoryName"];
-                                      String categoryIcon = data["IconName"];
+                                      String categoryIcon = iconNameList[index];
                                       return buildCard(
                                           index, categoryName, categoryIcon);
                                     }),
@@ -93,8 +93,8 @@ class _CreateCategoryState extends State<CreateCategory> {
                               CustomContainer(
                                   child: Column(
                                 children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                  const Padding(
+                                    padding: EdgeInsets.all(8.0),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
@@ -117,10 +117,8 @@ class _CreateCategoryState extends State<CreateCategory> {
                                 child: createCategoryButton(
                                     "Create", CustomColor.primaryColor),
                                 onTap: () {
-                                  print(selectIcon);
                                   selectIcon =
-                                      categoryList[checkedIndex]["IconName"];
-                                  print(selectIcon);
+                                      iconNameList[checkedIndex];
                                   categoryService.addCategory(
                                       categoryNameController.text, selectIcon);
                                   Navigator.push(
@@ -134,7 +132,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                             ],
                           ));
                         } else {
-                          return CircularProgressIndicator();
+                          return const CircularProgressIndicator();
                         }
                       },
                     ),
@@ -161,7 +159,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                 color: Colors.grey.withOpacity(0.1),
                 spreadRadius: 1,
                 blurRadius: 2,
-                offset: Offset(0, -1))
+                offset: const Offset(0, -1))
           ]),
       child: Center(
           child: Text(
@@ -181,7 +179,6 @@ class _CreateCategoryState extends State<CreateCategory> {
       onTap: () {
         setState(() {
           checkedIndex = index;
-          print(checkedIndex);
         });
       },
       child: Stack(
@@ -199,7 +196,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset(
-                    "assets/icons/${categoryIcon}.svg",
+                    "assets/icons/$categoryIcon.svg",
                     width: 30.w,
                     height: 28.h,
                   ),
@@ -217,7 +214,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                     color: Colors.white,
                     border: Border.all(width: 2),
                     shape: BoxShape.circle),
-                child: Icon(
+                child: const Icon(
                   Icons.check,
                   color: Colors.green,
                 ),

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -29,7 +28,6 @@ class _CreatePlanState extends State<CreatePlan> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     planService.setPlan();
     timeText = format.format(DateTime.now());
@@ -212,21 +210,21 @@ class _CreatePlanState extends State<CreatePlan> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Invalid Money Format"),
-                            content: Text(
+                            title: const Text("Invalid Money Format"),
+                            content: const Text(
                                 "Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -247,20 +245,20 @@ class _CreatePlanState extends State<CreatePlan> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Error"),
+                            title: const Text("Error"),
                             content: Text("An unexpected error occurred: $e"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -291,21 +289,21 @@ class _CreatePlanState extends State<CreatePlan> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Invalid Money Format"),
-                            content: Text(
+                            title: const Text("Invalid Money Format"),
+                            content: const Text(
                                 "Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -326,20 +324,20 @@ class _CreatePlanState extends State<CreatePlan> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Error"),
+                            title: const Text("Error"),
                             content: Text("An unexpected error occurred: $e"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -354,7 +352,7 @@ class _CreatePlanState extends State<CreatePlan> {
 
                   void fetchData() {}
                 },
-                child: createPlanButton("Create", CustomColor.primaryColor),
+                child: createPlanButton(docId == null ? "Create" : "Edit", CustomColor.primaryColor),
             )],
         )));
   }
@@ -389,7 +387,7 @@ class _CreatePlanState extends State<CreatePlan> {
                   color: Colors.grey.withOpacity(0.1),
                   spreadRadius: 1,
                   blurRadius: 2,
-                  offset: Offset(0, -1))
+                  offset: const Offset(0, -1))
             ]),
         child: Center(
             child: Text(

@@ -32,8 +32,14 @@ class _LoginState extends State<Login> {
                         SizedBox(
                           height: 50.h,
                         ),
-                        Image.asset("assets/images/logo_nobackground.png", width: 100.w,height: 100.h,),
-                        SizedBox(height: 20.h,),
+                        Image.asset(
+                          "assets/images/logo_nobackground.png",
+                          width: 100.w,
+                          height: 100.h,
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 25),
                           child: Text(
@@ -41,7 +47,9 @@ class _LoginState extends State<Login> {
                             style: TextStyle(fontSize: 22.sp),
                           ),
                         ),
-                        SizedBox(height: 30.h,),
+                        SizedBox(
+                          height: 30.h,
+                        ),
                         // reuseableText("Email"),
                         buildTextField(
                             "Email",
@@ -65,10 +73,36 @@ class _LoginState extends State<Login> {
                             bool signInPass = await signIn(
                                 emailController.text.trim(),
                                 passwordController.text.trim());
-                                // "Thanawatptd@hotmail.com",
-                                // "123456");
+                            // "Thanawatptd@hotmail.com",
+                            // "123456");
                             if (signInPass) {
                               Navigator.pushNamed(context, 'home'); //go to page
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('Sign In Error'),
+                                      content: Text(
+                                        "Invalid email or password. Please try again.",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium,
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          child: Text('OK'),
+                                          style: ButtonStyle(
+                                              foregroundColor:
+                                                  MaterialStatePropertyAll(
+                                                      CustomColor
+                                                          .primaryColor)),
+                                        ),
+                                      ],
+                                    );
+                                  });
                             }
                           },
                           child: loginButton("Login", CustomColor.primaryColor),

@@ -489,7 +489,7 @@ class _CreateRecordState extends State<CreateRecord> {
 
                   void fetchData() {}
                 },
-                child: createRecordButton("Create", CustomColor.primaryColor)),
+                child: createRecordButton(docId == null ? "Create" : "Edit", CustomColor.primaryColor)),
           ],
         )));
   }

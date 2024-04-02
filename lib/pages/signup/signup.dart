@@ -43,7 +43,11 @@ class _SignupState extends State<Signup> {
                         SizedBox(
                           height: 20.h,
                         ),
-                        Image.asset("assets/images/logo_nobackground.png",width: 100.w,height: 100.h,),
+                        Image.asset(
+                          "assets/images/logo_nobackground.png",
+                          width: 100.w,
+                          height: 100.h,
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(bottom: 25),
                           child: Text(
@@ -91,7 +95,8 @@ class _SignupState extends State<Signup> {
                                 bool registerPass = await register(
                                     usernameController.text,
                                     emailController.text,
-                                    passwordController.text);
+                                    passwordController.text,
+                                    context);
                                 if (registerPass) {
                                   Navigator.pushNamed(context, 'login');
                                 }

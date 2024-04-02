@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
-import 'package:project_mobile_app/models/category.dart';
 
 class RecordService {
   late String userId = FirebaseAuth.instance.currentUser!.uid;
