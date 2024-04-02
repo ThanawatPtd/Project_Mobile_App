@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:project_mobile_app/services/category_service.dart';
 import 'package:project_mobile_app/services/firestore_service.dart';
+import 'package:project_mobile_app/services/home_service.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 import 'package:project_mobile_app/services/flutterfire.dart';
 
@@ -23,22 +29,34 @@ class _SettingState extends State<Setting> {
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final categoryNameController = TextEditingController();
+
   late List categoryList;
   late String userImgae;
   late final userdoc;
+
+  XFile? _imageFile;
+  late Widget imageContainer;
+  late final Reference imageReference;
+  late String imageUrl = "";
+
   final CategoryService categoryService = CategoryService();
   final UserService userService = UserService();
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+  final HomeService homeService = HomeService();
 
   @override
   initState() {
     categoryService.setCategory();
+    imageReference = firebaseStorage
+        .ref()
+        .child("${uid}/${DateTime.now().millisecondsSinceEpoch}.png");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: userService.getUserData(),
+        future: homeService.getUserData(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Map<String, dynamic> data =
@@ -82,21 +100,21 @@ class _SettingState extends State<Setting> {
                                   ),
                                 ),
                                 settingButton(
-                                    "Password", Icon(Icons.arrow_right), () {
+                                    "Password", Icon(Icons.chevron_right), () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
                                         return changePasswordDialog();
                                       });
                                 }),
-                                settingButton("Category", Icon(Icons.abc), () {
+                                settingButton("Category", Icon(Icons.chevron_right), () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
                                         return showCategoryDialog();
                                       });
                                 }),
-                                settingButton("App info", Icon(Icons.abc), () {
+                                settingButton("App info", Icon(Icons.chevron_right), () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
@@ -124,10 +142,10 @@ class _SettingState extends State<Setting> {
                       Transform.translate(
                         offset: Offset(0, 30.h),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             profileImage(),
                           ],
-                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
                       )
                     ],
@@ -139,6 +157,27 @@ class _SettingState extends State<Setting> {
             return CircularProgressIndicator();
           }
         });
+  }
+
+  Future<void> onPressedGallery() async {
+    await pickImage(ImageSource.gallery);
+    if (_imageFile != null) {
+      final file = File(_imageFile!.path);
+      await imageReference.putFile(file);
+      final url = await imageReference.getDownloadURL();
+      imageUrl = url;
+      await homeService.updateImage(imageUrl);
+    }
+  }
+
+  Future<void> pickImage(ImageSource source) async {
+    if (await Permission.camera.request().isGranted) {
+      final imagePicker = ImagePicker();
+      final pickedFile = await imagePicker.pickImage(source: source);
+      setState(() {
+        _imageFile = pickedFile;
+      });
+    }
   }
 
   Widget textFieldSetting(String text, TextEditingController controller) {
@@ -204,19 +243,33 @@ class _SettingState extends State<Setting> {
   Widget profileImage() {
     // print(userImgae.allMatches("default"));
     if (userImgae.toString() != "default") {
-      return CircleAvatar(
-        radius: 45,
-        child: ClipOval(
-          child: Image.network(userImgae,
-              width: 120.w, height: 120.h, fit: BoxFit.cover,),
+      return GestureDetector(
+        onTap:(){
+          onPressedGallery();
+        },
+        child: CircleAvatar(
+          radius: 45,
+          child: ClipOval(
+            child: Image.network(
+              userImgae,
+              width: 120.w,
+              height: 120.h,
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
       );
     } else {
-      return CircleAvatar(
-        radius: 45,
-        child: ClipOval(
-          child: Image.asset("assets/images/logo.png",
-              width: 120.w, height: 120.h, fit: BoxFit.cover),
+      return GestureDetector(
+        onTap:() {
+          onPressedGallery();
+        },
+        child: CircleAvatar(
+          radius: 45,
+          child: ClipOval(
+            child: Image.asset("assets/images/logo.png",
+                width: 120.w, height: 120.h, fit: BoxFit.cover),
+          ),
         ),
       );
     }
@@ -389,6 +442,8 @@ Widget settingButton(String text, Icon icon, Function() function) {
       child: Column(children: [
         Container(
           width: 325.w,
+          height: 50.h,
+          // color: Colors.red,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

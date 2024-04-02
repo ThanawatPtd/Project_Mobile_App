@@ -28,10 +28,8 @@ class CategoryService{
 
       String category = data['CategoryName'];
       String iconName = data['IconName'];
-      print("${category} = ${categoryRecord}");
       if(category == categoryRecord){
         sendIconName = iconName;
-        print("11");
       }
     }
     return sendIconName;
