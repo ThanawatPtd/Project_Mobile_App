@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:intl/intl.dart';
 import 'package:project_mobile_app/pages/create_record/create_record.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
@@ -34,7 +32,7 @@ class ListPageState extends State<ListPage> {
           Material(
             child: Container(
               height: 55.h,
-              color: Color.fromARGB(255, 243, 243, 243),
+              color: const Color.fromARGB(255, 243, 243, 243),
               child: TabBar(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.all(10.h),
@@ -63,7 +61,7 @@ class ListPageState extends State<ListPage> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.center,
                         child: Text("Today"),
                       ),
@@ -84,7 +82,7 @@ class ListPageState extends State<ListPage> {
                       child: TabBarView(children: [
                     ListView.builder(
                       itemCount: recordList.length,
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       itemBuilder: (context, index) {
                         DocumentSnapshot doucument = recordList[index];
                         Map<String, dynamic> data =
@@ -93,13 +91,13 @@ class ListPageState extends State<ListPage> {
                         String docId = doucument.id;
                         return Slidable(
                             startActionPane: ActionPane(
-                                motion: BehindMotion(), children: [SlidableAction(
+                                motion: const BehindMotion(), children: [SlidableAction(
                                     backgroundColor: CustomColor.primaryColor,
                                     icon: Icons.edit,
                                     onPressed: (context) =>
                                         {Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRecord(docId: docId,)))})]),
                             endActionPane: ActionPane(
-                              motion: BehindMotion(),
+                              motion: const BehindMotion(),
                               children: [
                                 SlidableAction(
                                     backgroundColor: Colors.red,
@@ -113,14 +111,14 @@ class ListPageState extends State<ListPage> {
                               child: RecordCard(
                                   docId: docId,
                                   color: type == "Income"
-                                      ? Color.fromARGB(255, 77, 145, 90)
-                                      : Color.fromARGB(255, 255, 25, 25)),
+                                      ? const Color.fromARGB(255, 77, 145, 90)
+                                      : const Color.fromARGB(255, 255, 25, 25)),
                             ));
                       },
                     ),
                     ListView.builder(
                       itemCount: todayRecordList.length,
-                      padding: EdgeInsets.all(15),
+                      padding: const EdgeInsets.all(15),
                       itemBuilder: (context, index) {
                         DocumentSnapshot doucument = todayRecordList[index];
                         Map<String, dynamic> data =
@@ -129,13 +127,13 @@ class ListPageState extends State<ListPage> {
                         String docId = doucument.id;
                         return Slidable(
                             startActionPane: ActionPane(
-                                motion: BehindMotion(), children: [SlidableAction(
+                                motion: const BehindMotion(), children: [SlidableAction(
                                     backgroundColor: CustomColor.primaryColor,
                                     icon: Icons.edit,
                                     onPressed: (context) =>
                                         {Navigator.push(context, MaterialPageRoute(builder: (context) => CreateRecord(docId: docId,)))})]),
                             endActionPane: ActionPane(
-                              motion: BehindMotion(),
+                              motion: const BehindMotion(),
                               children: [
                                 SlidableAction(
                                     backgroundColor: Colors.red,
@@ -149,8 +147,8 @@ class ListPageState extends State<ListPage> {
                           child: RecordCard(
                               docId: docId,
                               color: type == "Income"
-                                  ? Color.fromARGB(255, 77, 145, 90)
-                                  : Color.fromARGB(255, 255, 25, 25)),
+                                  ? const Color.fromARGB(255, 77, 145, 90)
+                                  : const Color.fromARGB(255, 255, 25, 25)),
                         ));
                       },
                     ),

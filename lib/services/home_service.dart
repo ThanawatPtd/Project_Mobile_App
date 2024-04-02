@@ -44,7 +44,7 @@ class HomeService{
       String imageUrl = data['Image'];
     return await docRef.update({'Amount': amount, 'Email': email, 'Username': username, 'Image': imageUrl});
     }
-    return null;
+    return;
   }
 
   Future<void> updateImage(String imageUrl) async{
@@ -61,7 +61,7 @@ class HomeService{
       num amount = data['Amount'];
     return await docRef.update({'Amount': amount, 'Email': email, 'Username': username, 'Image': imageUrl});
     }
-    return null;
+    return;
   }
   
 }

@@ -194,15 +194,16 @@ List checkYear(List recordList,int year) {
           documentSnapshot.data() as Map<String, dynamic>;
       // Access specific fields
       num amount = data['Amount'];
-      String Category = data['Category'];
+      String category = data['Category'];
       DateTime date = dateFormat.parse(data['Date']);
       String description = data['Description'];
       String relatedPeople = data['Related People'];
       String type = data['Type'];
+      String imageUrl = data['Image'];
 
       List newRecordList = [];
       newRecordList
-          .addAll([amount, Category, date, description, relatedPeople, type]);
+          .addAll([amount, category, date, description, relatedPeople, type,imageUrl]);
       return newRecordList;
       // Use the data for your UI or logic
     }

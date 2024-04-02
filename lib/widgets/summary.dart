@@ -23,41 +23,41 @@ class GraphSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List colorList = [
-        Color.fromARGB(255, 255, 25, 25),
+        const Color.fromARGB(255, 255, 25, 25),
           CustomColor.primaryColor,
-          Color.fromARGB(255, 156, 156, 156),
-          Color.fromARGB(255, 158, 151, 100),
-          Color.fromARGB(255, 34, 113, 179),
-          Color.fromARGB(255, 001, 93, 82),
-          Color.fromARGB(255, 220, 156, 0),
-          Color.fromARGB(255, 121, 85, 61),
-          Color.fromARGB(255, 165, 32, 25),
-          Color.fromARGB(255, 88, 114, 70),
-          Color.fromARGB(255, 143, 139, 102),
-          Color.fromARGB(255, 112, 083, 053),
-          Color.fromARGB(255, 049, 127, 67),
-          Color.fromARGB(255, 222, 76, 138),
-          Color.fromARGB(255, 109, 63, 91),
-          Color.fromARGB(255, 217, 80, 48),
-          Color.fromARGB(255, 93, 155, 155),
-          Color.fromARGB(255, 59, 60, 54),
-          Color.fromARGB(255, 236, 124, 38),
-          Color.fromARGB(255, 248, 243, 53),
-          Color.fromARGB(255, 69, 50, 46),
-          Color.fromARGB(255, 199, 180, 70),
-          Color.fromARGB(255, 24, 23, 28),
-          Color.fromARGB(255, 32, 33, 79),
-          Color.fromARGB(255, 108, 112, 89),
-          Color.fromARGB(255, 165, 165, 165),
-          Color.fromARGB(255, 89, 35, 33),
-          Color.fromARGB(255, 27, 85, 131),
-          Color.fromARGB(255, 89, 53, 31),
-          Color.fromARGB(255, 193, 135, 107),
-          Color.fromARGB(255, 94, 33, 41),
-          Color.fromARGB(255, 169, 131, 7),
-          Color.fromARGB(255, 32, 33, 79),
-          Color.fromARGB(255, 214, 174, 001),
-          Color.fromARGB(255, 225, 204, 079),
+          const Color.fromARGB(255, 156, 156, 156),
+          const Color.fromARGB(255, 158, 151, 100),
+          const Color.fromARGB(255, 34, 113, 179),
+          const Color.fromARGB(255, 001, 93, 82),
+          const Color.fromARGB(255, 220, 156, 0),
+          const Color.fromARGB(255, 121, 85, 61),
+          const Color.fromARGB(255, 165, 32, 25),
+          const Color.fromARGB(255, 88, 114, 70),
+          const Color.fromARGB(255, 143, 139, 102),
+          const Color.fromARGB(255, 112, 083, 053),
+          const Color.fromARGB(255, 049, 127, 67),
+          const Color.fromARGB(255, 222, 76, 138),
+          const Color.fromARGB(255, 109, 63, 91),
+          const Color.fromARGB(255, 217, 80, 48),
+          const Color.fromARGB(255, 93, 155, 155),
+          const Color.fromARGB(255, 59, 60, 54),
+          const Color.fromARGB(255, 236, 124, 38),
+          const Color.fromARGB(255, 248, 243, 53),
+          const Color.fromARGB(255, 69, 50, 46),
+          const Color.fromARGB(255, 199, 180, 70),
+          const Color.fromARGB(255, 24, 23, 28),
+          const Color.fromARGB(255, 32, 33, 79),
+          const Color.fromARGB(255, 108, 112, 89),
+          const Color.fromARGB(255, 165, 165, 165),
+          const Color.fromARGB(255, 89, 35, 33),
+          const Color.fromARGB(255, 27, 85, 131),
+          const Color.fromARGB(255, 89, 53, 31),
+          const Color.fromARGB(255, 193, 135, 107),
+          const Color.fromARGB(255, 94, 33, 41),
+          const Color.fromARGB(255, 169, 131, 7),
+          const Color.fromARGB(255, 32, 33, 79),
+          const Color.fromARGB(255, 214, 174, 001),
+          const Color.fromARGB(255, 225, 204, 079),
         ];
     recordService.setRecord;
     return Container(
@@ -80,7 +80,7 @@ class GraphSummary extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(left: 15.h,bottom: 15.h),
             child: 
-            Container(
+            SizedBox(
               height: 75.h,
               child: 
             ListView.builder(
@@ -88,17 +88,14 @@ class GraphSummary extends StatelessWidget {
               itemCount: recordTypeList.length,  
               itemBuilder: (context, index) {
                 return 
-                  Container(
+                  SizedBox(
+                    height: 25.h,
                     child: 
-                    SizedBox(
-                      height: 25.h,
-                      child: 
-                      Row(children: [
-                        Container(width: 14.w,height: 14.h,decoration: BoxDecoration(shape: BoxShape.circle,color: colorList[index])),
-                        SizedBox(width: 8.w,),
-                        Text(recordTypeList[index], style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,overflow: TextOverflow.ellipsis),),
-                      ],),
-                    ),
+                    Row(children: [
+                      Container(width: 14.w,height: 14.h,decoration: BoxDecoration(shape: BoxShape.circle,color: colorList[index])),
+                      SizedBox(width: 8.w,),
+                      Text(recordTypeList[index], style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,overflow: TextOverflow.ellipsis),),
+                    ],),
                   );
               },)
               ),
@@ -117,7 +114,7 @@ class GraphSummary extends StatelessWidget {
           color: colorList[key],
           value: percent,
           title: '${percent.toStringAsFixed(2)}%',
-          titleStyle: TextStyle(
+          titleStyle: const TextStyle(
               fontSize: 12, fontWeight: FontWeight.bold, color: Colors.white,overflow: TextOverflow.ellipsis),
         );
         return MapEntry(key, value);
@@ -153,36 +150,35 @@ class RecordSummaryCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Padding(
-                  padding: EdgeInsets.all(30),
-                  child: Container(
-                      child: Column(children: [
+                  padding: const EdgeInsets.all(30),
+                  child: Column(children: [
+                                      Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            check == null ?SvgPicture.asset(
-                                "assets/icons/${image}.svg",
-                                height: 16.h,
-                                width: 16.h,
-                              ): Icon(Icons.monetization_on, color: color,),
-                            SizedBox(
-                              width: 50.w,
-                            ),
-                            Text(name)
-                          ],
+                        check == null ?SvgPicture.asset(
+                            "assets/icons/$image.svg",
+                            height: 16.h,
+                            width: 16.h,
+                          ): Icon(Icons.monetization_on, color: color,),
+                        SizedBox(
+                          width: 50.w,
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "THB ${amount.toStringAsFixed(2)}",
-                              style: TextStyle(color: color),
-                            ),
-                          ],
-                        )
+                        Text(name)
                       ],
                     ),
-                  ]))),
+                    Row(
+                      children: [
+                        Text(
+                          "THB ${amount.toStringAsFixed(2)}",
+                          style: TextStyle(color: color),
+                        ),
+                      ],
+                    )
+                  ],
+                                      ),
+                                    ])),
         );
         }
         else {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:project_mobile_app/pages/create_plan/create_plan.dart';
 import 'package:project_mobile_app/pages/create_record/create_record.dart';
 import 'package:project_mobile_app/pages/home/home_page.dart';
@@ -19,12 +18,11 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  List WidgetOption = [HomePage(), ListPage(), Summary(), Setting()];
+  List WidgetOption = [const HomePage(), const ListPage(), Summary(), const Setting()];
   List namePage = ["Home", "list", "Summary", "Setting"];
   int pageIndex = 0;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (widget.page != null) {
       pageIndex = widget.page!;
@@ -42,11 +40,11 @@ class _HomeState extends State<Home> {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CreateRecord()));
               },
+              backgroundColor: CustomColor.primaryColor,
               child: const Icon(
                 Icons.add,
                 color: Colors.white,
               ),
-              backgroundColor: CustomColor.primaryColor,
             )
           : pageIndex == 0
               ? FloatingActionButton(
@@ -54,14 +52,14 @@ class _HomeState extends State<Home> {
                     Navigator.push(context,
                     MaterialPageRoute(builder: (context) => CreatePlan()));
                   },
+                  backgroundColor: CustomColor.primaryColor,
                   child: const Icon(
                     Icons.playlist_add_rounded,
                     color: Colors.white,
                   ),
-                  backgroundColor: CustomColor.primaryColor,
                 )
               : null,
-      backgroundColor: pageIndex == 3 ?Colors.white : Color.fromARGB(255, 243, 243, 243),
+      backgroundColor: pageIndex == 3 ?Colors.white : const Color.fromARGB(255, 243, 243, 243),
       appBar: CustomAppBar(
         title: namePage[pageIndex],
         checkPop: false,
@@ -80,7 +78,7 @@ class _HomeState extends State<Home> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Color.fromARGB(255, 77, 145, 90)),
+            color: const Color.fromARGB(255, 77, 145, 90)),
         margin: EdgeInsets.only(left: 12.h, right: 12.h, bottom: 12.h),
         // Container(
         // margin: EdgeInsets.only(left: 16, right: 16),
@@ -131,7 +129,7 @@ class _HomeState extends State<Home> {
           showUnselectedLabels: true,
           type: BottomNavigationBarType.fixed,
           elevation: 0,
-          items: [
+          items: const [
             BottomNavigationBarItem(
                 icon: Icon(Icons.credit_card), label: 'home'),
             BottomNavigationBarItem(
@@ -164,7 +162,7 @@ class _HomeState extends State<Home> {
   Widget navItem(IconData icon, bool selected, {Function()? onTap}) {
     return Expanded(
         child: Container(
-      color: selected ? Color.fromARGB(255, 77, 145, 90) : Colors.white,
+      color: selected ? const Color.fromARGB(255, 77, 145, 90) : Colors.white,
       child: InkWell(
         child: Icon(
           icon,

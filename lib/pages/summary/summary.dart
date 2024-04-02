@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:project_mobile_app/services/record_services.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
-import 'package:project_mobile_app/widgets/list.dart';
 import 'package:project_mobile_app/widgets/summary.dart';
 
 class Summary extends StatelessWidget {
@@ -22,7 +19,7 @@ class Summary extends StatelessWidget {
           Material(
             child: Container(
               height: 55.h,
-              color: Color.fromARGB(255, 243, 243, 243),
+              color: const Color.fromARGB(255, 243, 243, 243),
               child: TabBar(
                 physics: const ClampingScrollPhysics(),
                 padding: EdgeInsets.all(10.h),
@@ -51,7 +48,7 @@ class Summary extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.center,
                         child: Text("Income"),
                       ),
@@ -63,7 +60,7 @@ class Summary extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: Align(
+                      child: const Align(
                         alignment: Alignment.center,
                         child: Text("Expense"),
                       ),
@@ -85,7 +82,7 @@ class Summary extends StatelessWidget {
 
                   return Expanded(child: TabBarView(children: [
                     
-                    Container(child: ListView(
+                    ListView(
                       children: [
                         GraphSummary(recordTypeList: totalList,recordList: recordList,field: "Type",kind: "Total"),
                         Container(
@@ -104,8 +101,8 @@ class Summary extends StatelessWidget {
                             },),
                         )
                       ],
-                    )),
-                    Container(child: ListView(
+                    ),
+                    ListView(
                       children: [
                         GraphSummary(recordTypeList: incomeList,recordList: recordList,field: "Category",kind: "Income"),
                         Container(
@@ -117,7 +114,7 @@ class Summary extends StatelessWidget {
                             itemBuilder: (context, index) {
                               List filtterRecordList = recordService.filtterRecordCategory(recordList, incomeList[index]);
                               num TotalAmount = recordService.sumTypeAmount(filtterRecordList, "Income");
-
+                    
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 5.h),
                                 child: RecordSummaryCard(name: incomeList[index],amount: TotalAmount, color: CustomColor.primaryColor),
@@ -125,8 +122,8 @@ class Summary extends StatelessWidget {
                             },),
                         )
                       ],
-                    )),
-                    Container(child: ListView(
+                    ),
+                    ListView(
                       children: [
                         GraphSummary(recordTypeList: expenseList,recordList: recordList,field: "Category",kind: "Expense"),
                         Container(
@@ -141,12 +138,12 @@ class Summary extends StatelessWidget {
                           
                               return Padding(
                                 padding: EdgeInsets.only(bottom: 5.h),
-                                child: RecordSummaryCard(name: expenseList[index],amount: TotalAmount, color: Color.fromARGB(255, 255, 25, 25)),
+                                child: RecordSummaryCard(name: expenseList[index],amount: TotalAmount, color: const Color.fromARGB(255, 255, 25, 25)),
                               );
                             },),
                         )
                       ],
-                    ))]));
+                    )]));
                   // return Container();                  
                 } else {
                   return const Text("Don't have any record");

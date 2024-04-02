@@ -1,7 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -40,7 +37,7 @@ class WalletCard extends StatelessWidget {
                   "Account",
                   style: TextStyle(fontSize: 12.h, color: Colors.grey[300]),
                 ),
-                Text(
+                const Text(
                   "MY ACCOUNT",
                   style: TextStyle(color: Colors.white),
                 ),
@@ -69,7 +66,7 @@ class WalletCard extends StatelessWidget {
                           style: TextStyle(color: Colors.grey[300]),
                         ),
                         Text(
-                          "${money.toStringAsFixed(2)}",
+                          money.toStringAsFixed(2),
                           softWrap: false,
                           style: TextStyle(
                               overflow: TextOverflow.ellipsis,
@@ -107,69 +104,67 @@ class ListCategory extends StatelessWidget {
           //     offset: Offset(0, 3),)]
         ),
         child: Padding(
-          padding: EdgeInsets.all(30),
-          child: Container(
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.monetization_on_rounded,
-                          color: CustomColor.primaryColor,
-                        ),
-                        SizedBox(
-                          width: 50.w,
-                        ),
-                        Text("income")
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "THB ${income}",
-                          style: TextStyle(color: CustomColor.primaryColor),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: 40.h,
-                  child: Divider(
-                    height: 1.h,
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.monetization_on_rounded,
+                        color: CustomColor.primaryColor,
+                      ),
+                      SizedBox(
+                        width: 50.w,
+                      ),
+                      const Text("income")
+                    ],
                   ),
+                  Row(
+                    children: [
+                      Text(
+                        "THB $income",
+                        style: TextStyle(color: CustomColor.primaryColor),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 40.h,
+                child: Divider(
+                  height: 1.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.monetization_on_rounded,
-                          color: Color.fromARGB(255, 255, 25, 25),
-                        ),
-                        SizedBox(
-                          width: 50.w,
-                        ),
-                        Text("Expense")
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "THB ${expense}",
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 255, 25, 25)),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ],
-            ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.monetization_on_rounded,
+                        color: Color.fromARGB(255, 255, 25, 25),
+                      ),
+                      SizedBox(
+                        width: 50.w,
+                      ),
+                      const Text("Expense")
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "THB $expense",
+                        style: const TextStyle(
+                            color: Color.fromARGB(255, 255, 25, 25)),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ],
           ),
         ));
   }
@@ -186,8 +181,8 @@ class CustomContainer extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), color: Colors.white),
-      child: child,
       margin: margin,
+      child: child,
     );
   }
 }
@@ -243,7 +238,7 @@ class _ShowPlanState extends State<ShowPlan> {
                         })
               ]),
               endActionPane: ActionPane(
-                motion: BehindMotion(),
+                motion: const BehindMotion(),
                 children: [
                   SlidableAction(
                       backgroundColor: Colors.red,
@@ -255,7 +250,7 @@ class _ShowPlanState extends State<ShowPlan> {
               child: Center(
                 child: Container(
                   width: 300.w,
-                  constraints: BoxConstraints(
+                  constraints: const BoxConstraints(
                     maxWidth: double.infinity,
                   ),
                   margin: EdgeInsets.all(8.h),
@@ -275,10 +270,10 @@ class _ShowPlanState extends State<ShowPlan> {
                         padding: EdgeInsets.only(
                             top: 10.h, left: 15.w, right: 15.w, bottom: 15.h),
                         child: Text(
-                          "${name} ${target.toStringAsFixed(2)} ${startDate.day}/${startDate.month}/${startDate.year} - ${endDate.day}/${endDate.month}/${endDate.year}",
+                          "$name ${target.toStringAsFixed(2)} ${startDate.day}/${startDate.month}/${startDate.year} - ${endDate.day}/${endDate.month}/${endDate.year}",
                           maxLines: 1,
                           softWrap: false,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.grey,
                               overflow: TextOverflow.ellipsis),
                         ),
@@ -293,7 +288,7 @@ class _ShowPlanState extends State<ShowPlan> {
                           children: [
                             Text(
                               "${(percent * 100).toStringAsFixed(2)}%",
-                              style: TextStyle(fontSize: 20.0),
+                              style: const TextStyle(fontSize: 20.0),
                             ),
                             (percent * 100) >= 70
                                 ? Icon(Icons.sentiment_satisfied_alt,
@@ -309,10 +304,10 @@ class _ShowPlanState extends State<ShowPlan> {
                           ],
                         ),
                         footer: Text(
-                          "${description}",
+                          description,
                           maxLines: 1,
                           softWrap: false,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.grey,
                             fontSize: 17.0,
                             overflow: TextOverflow.ellipsis,

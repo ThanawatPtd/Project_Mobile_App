@@ -51,7 +51,7 @@ class _CreateRecordState extends State<CreateRecord> {
     imageContainer = imageContainerFuction();
     imageReference = firebaseStorage
         .ref()
-        .child("${uid}/${DateTime.now().millisecondsSinceEpoch}.png");
+        .child("$uid/${DateTime.now().millisecondsSinceEpoch}.png");
     super.initState();
     docId = widget.docId;
     fetchData();
@@ -90,7 +90,7 @@ class _CreateRecordState extends State<CreateRecord> {
                         stream: categoryService.getCategories(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
-                            return CircularProgressIndicator();
+                            return const CircularProgressIndicator();
                           } else {
                             var categoryList = snapshot.data?.docs ?? [];
                             return Row(
@@ -106,8 +106,8 @@ class _CreateRecordState extends State<CreateRecord> {
                                   value: dropDownCategory,
                                   items: categoryList.map((index) {
                                     return DropdownMenuItem<String>(
-                                        child: Text(index["CategoryName"]),
-                                        value: index["CategoryName"]);
+                                        value: index["CategoryName"],
+                                        child: Text(index["CategoryName"]));
                                   }).toList(),
                                   onChanged: (String? value) {
                                     setState(() {
@@ -269,8 +269,8 @@ class _CreateRecordState extends State<CreateRecord> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
                         vertical: 10, horizontal: 10),
                     child: Text(
                       "Photo",
@@ -340,21 +340,21 @@ class _CreateRecordState extends State<CreateRecord> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Invalid Money Format"),
-                            content: Text(
+                            title: const Text("Invalid Money Format"),
+                            content: const Text(
                                 "Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -375,12 +375,12 @@ class _CreateRecordState extends State<CreateRecord> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
                             title: Text("Error"),
@@ -388,7 +388,7 @@ class _CreateRecordState extends State<CreateRecord> {
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -428,19 +428,19 @@ class _CreateRecordState extends State<CreateRecord> {
                                 Theme.of(context).colorScheme.error,
                             icon: Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Invalid Money Format"),
-                            content: Text(
+                            title: const Text("Invalid Money Format"),
+                            content: const Text(
                                 "Please enter a valid amount in the format: X.XX (e.g., 123.45)"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -461,20 +461,20 @@ class _CreateRecordState extends State<CreateRecord> {
                           return AlertDialog(
                             backgroundColor:
                                 Theme.of(context).colorScheme.error,
-                            icon: Icon(Icons.error),
+                            icon: const Icon(Icons.error),
                             iconColor: Colors.white,
-                            contentTextStyle: TextStyle(
+                            contentTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            titleTextStyle: TextStyle(
+                            titleTextStyle: const TextStyle(
                               color: Colors.white,
                             ),
-                            title: Text("Error"),
+                            title: const Text("Error"),
                             content: Text("An unexpected error occurred: $e"),
                             actions: [
                               TextButton(
                                   onPressed: () => Navigator.pop(context),
-                                  child: Text(
+                                  child: const Text(
                                     "OK",
                                     style: TextStyle(
                                       color: Colors.white,
@@ -509,7 +509,7 @@ class _CreateRecordState extends State<CreateRecord> {
                   color: Colors.grey.withOpacity(0.1),
                   spreadRadius: 1,
                   blurRadius: 2,
-                  offset: Offset(0, -1))
+                  offset: const Offset(0, -1))
             ]),
         child: Center(
             child: Text(
@@ -539,6 +539,8 @@ class _CreateRecordState extends State<CreateRecord> {
       descriptionController.text = list[3].toString();
       relatedController.text = list[4].toString();
       dropDownValue = list[5].toString();
+      imageUrl = list[6].toString();
+
     } else {
       // Handle no data case (e.g., show error message)
     }
@@ -602,13 +604,13 @@ class _CreateRecordState extends State<CreateRecord> {
             if (widget.toString() != Container().toString()) {
               imageContainer = widget;
             }
-          }, Icon(Icons.camera_alt), "Camera", Colors.green[200]!),
+          }, const Icon(Icons.camera_alt), "Camera", Colors.green[200]!),
           imageButton(() async {
             Widget widget = await onPressedGallery();
             if (widget.toString() != Container().toString()) {
               imageContainer = widget;
             }
-          }, Icon(Icons.photo), "Gallery", Colors.green[300]!)
+          }, const Icon(Icons.photo), "Gallery", Colors.green[300]!)
         ],
       ),
     );
@@ -621,7 +623,7 @@ class _CreateRecordState extends State<CreateRecord> {
       decoration: BoxDecoration(
           color: Colors.red[400], borderRadius: BorderRadius.circular(5)),
       child: GestureDetector(
-        child: Icon(Icons.close,color: Colors.white,),
+        child: const Icon(Icons.close,color: Colors.white,),
         onTap: () {
           setState(() {
             imageContainer = imageContainerFuction();
@@ -670,6 +672,7 @@ Widget customTextField(TextEditingController controller, String text,
 Widget imageButton(
     Function() function, Icon icon, String buttonName, Color color) {
   return GestureDetector(
+      onTap: function,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Container(
@@ -682,7 +685,6 @@ Widget imageButton(
             children: [icon, Text(buttonName)],
           ),
         ),
-      ),
-      onTap: function);
+      ));
 }
 

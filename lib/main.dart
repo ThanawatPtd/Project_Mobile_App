@@ -13,7 +13,6 @@ import 'package:project_mobile_app/pages/setting/setting.dart';
 import 'package:project_mobile_app/pages/signup/signup.dart';
 import 'package:project_mobile_app/pages/summary/summary.dart';
 import 'package:project_mobile_app/pages/welcome/bloc/welcomeBloc.dart';
-import 'package:project_mobile_app/testTextTheme.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
 void main() async {
@@ -98,7 +97,7 @@ class MyApp extends StatelessWidget {
                   highlightColor: Colors.transparent,
                 ),
                 debugShowCheckedModeBanner: false,
-                home: Login(),
+                home: const Login(),
                 routes: {
                   'login': (context) => const Login(),
                   'signup': (context) => const Signup(),

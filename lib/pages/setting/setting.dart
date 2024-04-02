@@ -3,9 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,7 +47,7 @@ class _SettingState extends State<Setting> {
     categoryService.setCategory();
     imageReference = firebaseStorage
         .ref()
-        .child("${uid}/${DateTime.now().millisecondsSinceEpoch}.png");
+        .child("$uid/${DateTime.now().millisecondsSinceEpoch}.png");
     super.initState();
   }
 
@@ -74,7 +72,7 @@ class _SettingState extends State<Setting> {
                         decoration: BoxDecoration(color: Colors.grey[200]),
                       ),
                       Transform.translate(
-                        offset: Offset(0, 90),
+                        offset: const Offset(0, 90),
                         child: Container(
                             decoration: BoxDecoration(
                                 boxShadow: [
@@ -100,21 +98,21 @@ class _SettingState extends State<Setting> {
                                   ),
                                 ),
                                 settingButton(
-                                    "Password", Icon(Icons.chevron_right), () {
+                                    "Password", const Icon(Icons.chevron_right), () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
                                         return changePasswordDialog();
                                       });
                                 }),
-                                settingButton("Category", Icon(Icons.chevron_right), () {
+                                settingButton("Category", const Icon(Icons.chevron_right), () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
                                         return showCategoryDialog();
                                       });
                                 }),
-                                settingButton("App info", Icon(Icons.chevron_right), () {
+                                settingButton("App info", const Icon(Icons.chevron_right), () {
                                   showDialog(
                                       context: context,
                                       builder: (context) {
@@ -154,7 +152,7 @@ class _SettingState extends State<Setting> {
               ),
             ]);
           } else {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           }
         });
   }
@@ -232,7 +230,7 @@ class _SettingState extends State<Setting> {
 
       // Access specific fields
       String image = data["Image"];
-      return '$image';
+      return image;
       // Use the data for your UI or logic
     } else {
       // The document does not exist
@@ -280,7 +278,9 @@ class _SettingState extends State<Setting> {
             textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
                     foregroundColor: CustomColor.primaryColor))),
-        child: AboutDialog(
+        child: const AboutDialog(
+            applicationName: "Project Mobile App",
+            applicationVersion: "version: 0.0.1",
             children: [
               Column(
                 children: [
@@ -289,9 +289,7 @@ class _SettingState extends State<Setting> {
                   Text("Chutipong Triyasith")
                 ],
               )
-            ],
-            applicationName: "Project Mobile App",
-            applicationVersion: "version: 0.0.1"));
+            ]));
   }
 
   Widget showCategoryDialog() {
@@ -373,12 +371,12 @@ class _SettingState extends State<Setting> {
 
   Widget changePasswordDialog() {
     return Dialog(
-      child: Container(
+      child: SizedBox(
         height: 300,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text("Change Password"),
+            const Text("Change Password"),
             textFieldSetting("Old Password", oldPasswordController),
             textFieldSetting("New Password", newPasswordController),
             textFieldSetting("Confirm Password", confirmPasswordController),
@@ -398,7 +396,7 @@ class _SettingState extends State<Setting> {
                           context: context,
                           builder: (context) {
                             return AlertDialog(
-                              content: Text(
+                              content: const Text(
                                 "Change Password Successful",
                               ),
                               actions: [
@@ -412,7 +410,7 @@ class _SettingState extends State<Setting> {
                                       Navigator.pop(
                                           context); // Close AlertDialog
                                     },
-                                    child: Text("OK"),
+                                    child: const Text("OK"),
                                   ),
                                 )
                               ],
@@ -421,11 +419,11 @@ class _SettingState extends State<Setting> {
                     }
                   }
                 },
-                child: Text("Confirm Password"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: CustomColor.primaryColor,
                   foregroundColor: Colors.white,
-                )),
+                ),
+                child: const Text("Confirm Password")),
           ],
         ),
       ),
@@ -439,7 +437,7 @@ Widget settingButton(String text, Icon icon, Function() function) {
     child: Padding(
       padding: const EdgeInsets.all(5.0),
       child: Column(children: [
-        Container(
+        SizedBox(
           width: 325.w,
           height: 50.h,
           // color: Colors.red,
@@ -454,8 +452,8 @@ Widget settingButton(String text, Icon icon, Function() function) {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: Divider(
             height: 1,
           ),
@@ -478,7 +476,7 @@ Widget logoutButton(String text, Color color) {
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 2,
-              offset: Offset(0, -1))
+              offset: const Offset(0, -1))
         ]),
     child: Center(
         child: Text(
@@ -519,7 +517,7 @@ Widget categoryCard(String categoryName, String categoryIcon) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset(
-              "assets/icons/${categoryIcon}.svg",
+              "assets/icons/$categoryIcon.svg",
               width: 30.w,
               height: 28.h,
             ),
@@ -527,7 +525,7 @@ Widget categoryCard(String categoryName, String categoryIcon) {
               padding: const EdgeInsets.only(top: 10),
               child: Text(
                 categoryName,
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
                 overflow: TextOverflow.ellipsis,
                 softWrap: false,
               ),

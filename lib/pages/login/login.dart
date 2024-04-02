@@ -1,4 +1,3 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -82,7 +81,7 @@ class _LoginState extends State<Login> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text('Sign In Error'),
+                                      title: const Text('Sign In Error'),
                                       content: Text(
                                         "Invalid email or password. Please try again.",
                                         style: Theme.of(context)
@@ -93,12 +92,12 @@ class _LoginState extends State<Login> {
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.pop(context),
-                                          child: Text('OK'),
                                           style: ButtonStyle(
                                               foregroundColor:
                                                   MaterialStatePropertyAll(
                                                       CustomColor
                                                           .primaryColor)),
+                                          child: const Text('OK'),
                                         ),
                                       ],
                                     );

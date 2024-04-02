@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:project_mobile_app/models/appicon.dart';
 import 'package:project_mobile_app/services/category_service.dart';
@@ -60,10 +58,10 @@ void _showErrorDialog(BuildContext context, String message) {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: Text('OK'),
           style: ButtonStyle(
               foregroundColor:
                   MaterialStatePropertyAll(CustomColor.primaryColor)),
+          child: const Text('OK'),
         ),
       ],
     ),
@@ -73,9 +71,9 @@ void _showErrorDialog(BuildContext context, String message) {
 Future<bool> changePassword(String currentPassword, String newPassword) async {
   bool success = false;
 
-  var user = await FirebaseAuth.instance.currentUser!;
+  var user = FirebaseAuth.instance.currentUser!;
 
-  final cred = await EmailAuthProvider.credential(
+  final cred = EmailAuthProvider.credential(
       email: user.email!, password: currentPassword);
   await user.reauthenticateWithCredential(cred).then((value) async {
     await user.updatePassword(newPassword).then((_) {

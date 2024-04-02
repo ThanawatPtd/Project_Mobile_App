@@ -6,14 +6,12 @@ import 'package:project_mobile_app/Widgets/colors.dart';
 Widget reuseableText(String text) {
   return Container(
     margin: EdgeInsets.only(top: 5.h, bottom: 10.h),
-    child: Container(
-      child: Text(
-        text,
-        style: TextStyle(
-          color: Colors.grey.withOpacity(0.5),
-          fontWeight: FontWeight.normal,
-          fontSize: 14.sp,
-        ),
+    child: Text(
+      text,
+      style: TextStyle(
+        color: Colors.grey.withOpacity(0.5),
+        fontWeight: FontWeight.normal,
+        fontSize: 14.sp,
       ),
     ),
   );
@@ -76,16 +74,14 @@ Widget signUpButton() {
     
     child: Container(
       margin: EdgeInsets.only(top: 5.h, bottom: 10.h),
-      child: Container(
-        child: Text(
-          "Sign up",
-          style: TextStyle(
-            decoration: TextDecoration.underline,
-            decorationColor: CustomColor.primaryColor,
-            color: CustomColor.primaryColor,
-            fontWeight: FontWeight.normal,
-            fontSize: 14.sp,
-          ),
+      child: Text(
+        "Sign up",
+        style: TextStyle(
+          decoration: TextDecoration.underline,
+          decorationColor: CustomColor.primaryColor,
+          color: CustomColor.primaryColor,
+          fontWeight: FontWeight.normal,
+          fontSize: 14.sp,
         ),
       ),
     ),
@@ -105,7 +101,7 @@ Widget loginButton(String text, Color color) {
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 1,
               blurRadius: 2,
-              offset: Offset(0, -1))
+              offset: const Offset(0, -1))
         ]),
     child: Center(
         child: Text(

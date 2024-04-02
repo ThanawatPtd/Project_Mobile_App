@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class PlanService {
@@ -70,7 +69,7 @@ class PlanService {
       Map<String, dynamic> data = doucument.data() as Map<String, dynamic>;
 
       DateTime date = dateFormat.parse(data['Date']);
-      if (date.isAtSameMomentAs(startDate) ||(date.isAfter(startDate) && date.isBefore(endDate.add(Duration(days: 1))))) {
+      if (date.isAtSameMomentAs(startDate) ||(date.isAfter(startDate) && date.isBefore(endDate.add(const Duration(days: 1))))) {
         newRecordList.add(record);
       }
     }
