@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:getwidget/components/progress_bar/gf_progress_bar.dart';
 import 'package:project_mobile_app/widgets/colors.dart';
 
 class WalletCard extends StatelessWidget {
@@ -199,4 +200,24 @@ class CustomContainer extends StatelessWidget {
       margin: margin,
     );
   }
+}
+
+Widget showPlan(String docId,String name,num percent){
+  return Container(
+    child: Column(children: [Text(name),
+    GFProgressBar(
+      percentage: 0.7,
+      width: 150.h,
+      radius: 100,
+      alignment: MainAxisAlignment.spaceBetween,
+      child: const Text('70%', textAlign: TextAlign.end,
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+      leading  : Icon( Icons.sentiment_dissatisfied, color: Colors.red),
+      trailing: Icon( Icons.sentiment_satisfied, color: Colors.green),
+      backgroundColor: Colors.black12,
+      progressBarColor: Colors.blue,
+    )
+    ],),
+  );
 }

@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -59,6 +61,8 @@ class _RecordCardState extends State<RecordCard> {
             date = DateFormat("yyyy-MM-dd").parse(data['Date']);
             description = data['Description'];
             relatedPeople = data['Related People'];
+            String? image = data['Image'];
+            
             return GestureDetector(
                 onTap: () {
                   showDialog(
@@ -90,7 +94,7 @@ class _RecordCardState extends State<RecordCard> {
                         content: Container(
                           height: 300.h,
                           width: 300.w,
-                          child: Column(
+                          child: ListView(
                             children: [
                               SizedBox(
                                 height: 20,
@@ -234,6 +238,29 @@ class _RecordCardState extends State<RecordCard> {
                                   maxLines: 6,
                                 ),
                               ),
+                              SizedBox(
+                                height: 20,
+                                child: Divider(
+                                  height: 1.h,
+                                ),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  image != null ? Text("Image"): Text(""),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 10.h,
+                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  height: 150.h,
+                                  width: 150.w,
+                                  child: image != null ? Image.network(image,fit: BoxFit.cover,) : null,
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -265,9 +292,10 @@ class _RecordCardState extends State<RecordCard> {
                             children: [
                               Row(
                                 children: [
-                                  Icon(
-                                    Icons.monetization_on_rounded,
-                                    color: widget.color,
+                                  SvgPicture.asset(
+                                    "assets/icons/${name}.svg",
+                                    height: 16.h,
+                                    width: 16.h,
                                   ),
                                   SizedBox(
                                     width: 50.w,
