@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -189,8 +190,8 @@ class _CreatePlanState extends State<CreatePlan> {
                 ),
               )),
             ),
-            ElevatedButton(
-                onPressed: () async {
+            GestureDetector(
+                onTap: () async {
                   if (docId == null) {
                     try {
                       await planService.addPlan(
@@ -353,8 +354,8 @@ class _CreatePlanState extends State<CreatePlan> {
 
                   void fetchData() {}
                 },
-                child: Text("Comfirm")),
-          ],
+                child: createPlanButton("Create", CustomColor.primaryColor),
+            )],
         )));
   }
 
@@ -372,6 +373,38 @@ class _CreatePlanState extends State<CreatePlan> {
           format.format(data['EndDate']);
     });
   }
+
+  Widget createPlanButton(String text, Color color) {
+    return Padding(
+      padding: EdgeInsets.all(10.h),
+      child: Container(
+        margin: EdgeInsets.only(top: 20.h),
+        width: 325.w,
+        height: 40.h,
+        decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.all(Radius.circular(15.w)),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(0, -1))
+            ]),
+        child: Center(
+            child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 16.sp,
+          ),
+        )),
+      ),
+    );
+  }
+
+
 
   Widget customTextField(TextEditingController controller, String text,
     TextInputType inputType, int height) {

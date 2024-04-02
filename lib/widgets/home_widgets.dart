@@ -33,27 +33,18 @@ class WalletCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 40.h, top: 20.h),
-            child: Text(
-              "Account",
-              style: TextStyle(fontSize: 12.h, color: Colors.grey[300]),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 28.h, top: 35.h),
-            child: Text(
+            padding: EdgeInsets.only(left: 20.h, top: 15.h),
+            child: Column(
+              children: [
+                Text(
+                  "Account",
+                  style: TextStyle(fontSize: 12.h, color: Colors.grey[300]),
+                ),
+                Text(
               "MY ACCOUNT",
               style: TextStyle(color: Colors.white),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 250.h, top: 15.h),
-            child: IconButton(
-              icon: Icon(
-                Icons.settings,
-                color: Colors.white,
-              ),
-              onPressed: () {},
+              ],
             ),
           ),
           Padding(
@@ -68,26 +59,26 @@ class WalletCard extends StatelessWidget {
                       color: CustomColor.primaryColor,
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2.h)),
-                  child: Stack(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 40.h, top: 30.h),
-                        child: Text(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 5.h),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
                           "Money",
                           style: TextStyle(color: Colors.grey[300]),
                         ),
-                      ),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "${money.toStringAsFixed(2)}",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.h,
-                              fontWeight: FontWeight.bold),
-                        ),
-                      )
-                    ],
+                        Text(
+                      "${money.toStringAsFixed(2)}",
+                      softWrap: false,
+                      style: TextStyle(
+                          overflow: TextOverflow.ellipsis,
+                          color: Colors.white,
+                          fontSize: 15.h,
+                          fontWeight: FontWeight.bold),
+                    ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -316,17 +307,17 @@ class _ShowPlanState extends State<ShowPlan> {
                         children: [
                           Text(
                             "${(percent * 100).toStringAsFixed(2)}%",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 20.0),
+                            style: TextStyle(fontSize: 20.0),
                           ),
                           (percent*100) >= 70 ? Icon(Icons.sentiment_satisfied_alt,color: CustomColor.primaryColor,size: 30.h) : (percent*100) >= 40 ? Icon(Icons.sentiment_neutral,color: Colors.amber,size: 30.h,) : Icon(Icons.sentiment_dissatisfied_outlined,color: Colors.red,size: 30.h),
                         ],
                       ),
                       footer: Text(
                         "${description}",
+                        maxLines: 1,
                         softWrap: false,
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          color: Colors.grey,
                           fontSize: 17.0,
                           overflow: TextOverflow.ellipsis,
                         ),
