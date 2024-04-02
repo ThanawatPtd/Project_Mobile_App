@@ -109,7 +109,7 @@ class _CreateCategoryState extends State<CreateCategory> {
                                         categoryNameController,
                                         "Category Name",
                                         TextInputType.name,
-                                        50),
+                                        55),
                                   ),
                                 ],
                               )),
@@ -202,14 +202,6 @@ class _CreateCategoryState extends State<CreateCategory> {
                     "assets/icons/${categoryIcon}.svg",
                     width: 30.w,
                     height: 28.h,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Text(
-                      name,
-                      style: TextStyle(
-                          color: checked ? Colors.white : Colors.black),
-                    ),
                   ),
                 ],
               ),

@@ -284,7 +284,7 @@ class _CreateRecordState extends State<CreateRecord> {
             ),
             Padding(
               // Related TextField
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left:8.0, right: 8, top:8),
               child: CustomContainer(
                   child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -299,7 +299,7 @@ class _CreateRecordState extends State<CreateRecord> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 5.0, left: 2.0),
+                      padding: const EdgeInsets.only( left: 2.0),
                       child: customTextField(
                           relatedController, "", TextInputType.multiline, 70),
                     ),
@@ -307,8 +307,8 @@ class _CreateRecordState extends State<CreateRecord> {
                 ),
               )),
             ),
-            ElevatedButton(
-                onPressed: () async {
+            GestureDetector(
+                onTap: () async {
                   if (_imageFile != null) {
                     final file = File(_imageFile!.path);
                     await imageReference.putFile(file);
@@ -489,9 +489,39 @@ class _CreateRecordState extends State<CreateRecord> {
 
                   void fetchData() {}
                 },
-                child: Text("Comfirm")),
+                child: createRecordButton("Create", CustomColor.primaryColor)),
           ],
         )));
+  }
+
+  Widget createRecordButton(String text, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(left :10.0,right: 10.0, bottom: 10),
+      child: Container(
+        margin: EdgeInsets.only(top: 20.h),
+        width: 325.w,
+        height: 50.h,
+        decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.all(Radius.circular(15.w)),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(0, -1))
+            ]),
+        child: Center(
+            child: Text(
+          text,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.normal,
+            fontSize: 16.sp,
+          ),
+        )),
+      ),
+    );
   }
 
   Future<void> fetchData() async {
