@@ -307,7 +307,7 @@ class _SettingState extends State<Setting> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Category"),
+                  Text("Category", style: Theme.of(context).textTheme.headlineMedium,),
                   smallButton(
                       () => Navigator.pop(context),
                       Colors.red,
